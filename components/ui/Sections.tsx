@@ -8,6 +8,8 @@ import { nav, playBell, setUI, useUI } from '@/lib/store';
 import { BellIcon } from '../Experience';
 
 const panel = 'rounded-[28px] border border-white/70 bg-cream/[0.86] shadow-soft backdrop-blur-xl';
+/** Bottom sheet on phones & portrait tablets, side card on landscape screens. */
+const sheet = 'w-full overflow-y-auto overscroll-contain p-5 sm:p-7 max-h-[56svh] side:max-h-[calc(100svh-8rem)] side:p-8 short:max-h-[calc(100svh-6rem)] short:p-5';
 
 function Eyebrow({ children, dark = false }: { children: React.ReactNode; dark?: boolean }) {
   return (
@@ -113,21 +115,21 @@ function Welcome() {
   };
   return (
     <section id="welcome" className="relative h-[260vh]" aria-label="Welcome">
-      <div className="sticky top-0 flex h-[100svh] items-end overflow-hidden pb-[9vh] sm:items-center sm:pb-0">
+      <div className="sticky top-0 flex h-[100svh] items-end overflow-hidden pb-[8svh] side:items-center side:pb-0">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 hidden w-[70%] bg-[radial-gradient(ellipse_at_15%_60%,rgba(251,245,233,0.82),rgba(251,245,233,0.35)_38%,transparent_62%)] sm:block"
+          className="pointer-events-none absolute inset-y-0 left-0 hidden w-[70%] bg-[radial-gradient(ellipse_at_15%_60%,rgba(251,245,233,0.82),rgba(251,245,233,0.35)_38%,transparent_62%)] side:block"
         />
-        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-cream via-cream/85 to-transparent sm:hidden" />
-        <div data-hero className="relative mx-auto w-full max-w-6xl px-6 sm:px-10">
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-cream via-cream/85 to-transparent side:hidden" />
+        <div data-hero className="relative w-full px-6 sm:px-10 side:pl-[max(2.5rem,7vw)] side:pt-16">
           <p className="mb-5 font-sans text-xs font-semibold uppercase tracking-[0.3em] text-moss">Welcome to</p>
-          <h1 className="max-w-[12ch] font-serif text-[clamp(2.8rem,8vw,6.6rem)] font-[420] leading-[0.92] tracking-[-0.02em] text-ink [font-variation-settings:'SOFT'_100,'WONK'_1]">
+          <h1 className="max-w-[12ch] font-serif text-[clamp(2.4rem,min(8vw,11svh),6.6rem)] font-[420] leading-[0.92] tracking-[-0.02em] text-ink [font-variation-settings:'SOFT'_100,'WONK'_1]">
             A Little World <em className="font-[380] text-terracotta">of My Own</em>
           </h1>
-          <p className="mt-6 max-w-md text-[17px] leading-relaxed text-ink/75">
+          <p className="mt-5 max-w-md text-[16px] leading-relaxed text-ink/75 sm:text-[17px] short:mt-3 short:text-[14px]">
             {site.name} — {site.role.toLowerCase()}. {site.tagline}
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="mt-7 flex flex-wrap items-center gap-3 short:mt-4">
             <button
               onClick={ring}
               className="group flex h-12 items-center gap-2.5 rounded-full bg-ink pl-4 pr-6 text-[15px] font-semibold text-cream shadow-soft transition hover:bg-moss"
@@ -145,7 +147,7 @@ function Welcome() {
             </button>
           </div>
         </div>
-        <div data-hint className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-ink/60 sm:flex">
+        <div data-hint className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-ink/60 side:flex short:hidden">
           <span className="text-xs font-medium tracking-wide">Scroll to walk up the path</span>
           <span className="h-9 w-5 rounded-full border-2 border-ink/30 p-1">
             <span className="block h-2 w-full animate-[scrollcue_1.8s_ease-in-out_infinite] rounded-full bg-ink/40" />
@@ -161,9 +163,9 @@ function Welcome() {
 function About() {
   return (
     <section id="about" className="relative h-[230vh]" aria-labelledby="about-h">
-      <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 sm:items-center sm:px-6 sm:pb-0">
-        <div className="mx-auto flex w-full max-w-6xl justify-end">
-          <div data-panel data-lenis-prevent className={`${panel} max-h-[62svh] w-full max-w-[440px] overflow-y-auto p-6 sm:max-h-none sm:p-8`}>
+      <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
+        <div className="mx-auto flex w-full max-w-6xl justify-center side:justify-end">
+          <div data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] side:max-w-[440px]`}>
             <div data-reveal>
               <Eyebrow>{about.eyebrow}</Eyebrow>
             </div>
@@ -191,7 +193,7 @@ function About() {
                 Into the workshop →
               </button>
             </div>
-            <p data-reveal className="mt-5 hidden text-xs italic text-ink/50 sm:block">
+            <p data-reveal className="mt-5 hidden text-xs italic text-ink/50 [@media(hover:hover)]:block">
               Psst — hover the laptop on the desk.
             </p>
           </div>
@@ -206,26 +208,26 @@ function About() {
 function Projects({ trackRef }: { trackRef: React.RefObject<HTMLDivElement | null> }) {
   return (
     <section id="projects" className="relative" style={{ height: `${160 + projects.length * 45}vh` }} aria-labelledby="projects-h">
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-end overflow-hidden pb-5 pt-24 sm:pb-8">
-        <div className="mx-auto mb-4 w-full max-w-6xl px-5 sm:px-8">
-          <div className={`${panel} inline-block px-5 py-4 sm:px-6`} data-panel>
+      <div className="sticky top-0 flex h-[100svh] flex-col justify-end overflow-hidden pb-4 pt-24 sm:pb-8 short:pb-2 short:pt-16">
+        <div className="mx-auto mb-4 w-full max-w-6xl px-4 sm:px-8 short:mb-2">
+          <div className={`${panel} inline-block px-5 py-4 sm:px-6 short:py-2`} data-panel>
             <div data-reveal>
               <Eyebrow>The workshop</Eyebrow>
             </div>
             <h2 id="projects-h" data-reveal className="font-serif text-[clamp(1.6rem,3vw,2.3rem)] font-[450] leading-tight text-ink">
               Things I’ve built
             </h2>
-            <p data-reveal className="mt-1 text-sm text-ink/60">
+            <p data-reveal className="mt-1 text-sm text-ink/60 short:hidden">
               Keep scrolling to slide along the bench.
             </p>
           </div>
         </div>
         <div className="w-full overflow-hidden">
-          <div ref={trackRef} className="flex w-max gap-4 px-5 will-change-transform sm:gap-5 sm:px-[max(2rem,calc((100vw-72rem)/2+2rem))]">
+          <div ref={trackRef} className="flex w-max gap-3 px-4 will-change-transform sm:gap-5 sm:px-[max(2rem,calc((100vw-72rem)/2+2rem))]">
             {projects.map((p, i) => (
               <article
                 key={p.id}
-                className={`${panel} flex w-[min(84vw,380px)] shrink-0 flex-col p-6`}
+                className={`${panel} flex w-[min(82vw,380px)] shrink-0 flex-col p-5 sm:p-6 short:p-4`}
                 style={{ borderTop: `4px solid ${p.accent}` }}
               >
                 <div className="flex items-baseline justify-between text-xs font-semibold uppercase tracking-[0.18em] text-ink/50">
@@ -233,8 +235,8 @@ function Projects({ trackRef }: { trackRef: React.RefObject<HTMLDivElement | nul
                   <span>{p.year}</span>
                 </div>
                 <h3 className="mt-3 font-serif text-2xl font-[500] text-ink">{p.title}</h3>
-                <p className="mt-2 text-[14.5px] leading-relaxed text-ink/75">{p.summary}</p>
-                <ul className="mt-3 space-y-1 text-[13px] text-ink/70">
+                <p className="mt-2 text-[14px] leading-relaxed text-ink/75 sm:text-[14.5px]">{p.summary}</p>
+                <ul className="mt-3 space-y-1 text-[13px] text-ink/70 short:hidden">
                   {p.details.map((d) => (
                     <li key={d} className="flex gap-2">
                       <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: p.accent }} />
@@ -249,7 +251,7 @@ function Projects({ trackRef }: { trackRef: React.RefObject<HTMLDivElement | nul
                     </li>
                   ))}
                 </ul>
-                <div className="mt-auto flex gap-2 pt-5">
+                <div className="mt-auto flex flex-wrap gap-2 pt-5 short:pt-3">
                   {p.github && (
                     <a href={p.github} target="_blank" rel="noopener" className="flex items-center gap-1.5 rounded-full border border-ink/15 px-3.5 py-2 text-[13px] font-semibold text-ink hover:bg-ink/5">
                       <GitHubIcon /> Code
@@ -283,9 +285,9 @@ function Research() {
   const hovered = useUI((s) => s.hovered);
   return (
     <section id="research" className="relative h-[230vh]" aria-labelledby="research-h">
-      <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 sm:items-center sm:px-6 sm:pb-0">
-        <div className="mx-auto w-full max-w-6xl">
-          <div data-panel data-lenis-prevent className={`${panel} max-h-[62svh] w-full max-w-[460px] overflow-y-auto p-6 sm:max-h-[78svh] sm:p-8`}>
+      <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
+        <div className="mx-auto flex w-full max-w-6xl justify-center side:justify-start">
+          <div data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] side:max-w-[460px]`}>
             <div data-reveal>
               <Eyebrow>The library</Eyebrow>
             </div>
@@ -331,7 +333,7 @@ function Research() {
                 );
               })}
             </ul>
-            <p data-reveal className="mt-4 hidden text-xs italic text-ink/50 sm:block">
+            <p data-reveal className="mt-4 hidden text-xs italic text-ink/50 [@media(hover:hover)]:block">
               Each book on the table is one of these — hover to pull it off the shelf.
             </p>
           </div>
@@ -348,9 +350,9 @@ function Cooking() {
   const hovered = useUI((s) => s.hovered);
   return (
     <section id="cooking" className="relative h-[250vh]" aria-labelledby="cooking-h">
-      <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 sm:items-center sm:px-6 sm:pb-0">
-        <div className="mx-auto flex w-full max-w-6xl justify-end">
-          <div data-panel data-lenis-prevent className={`${panel} max-h-[62svh] w-full max-w-[460px] overflow-y-auto p-6 sm:max-h-[78svh] sm:p-8`}>
+      <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
+        <div className="mx-auto flex w-full max-w-6xl justify-center side:justify-end">
+          <div data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] side:max-w-[460px]`}>
             <div data-reveal>
               <Eyebrow>The kitchen</Eyebrow>
             </div>
@@ -413,9 +415,9 @@ function Cooking() {
 function Contact() {
   return (
     <section id="contact" className="relative h-[170vh]" aria-labelledby="contact-h">
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-end px-3 pb-3 pt-24 sm:justify-center sm:px-6 sm:pb-0">
-        <div className="mx-auto w-full max-w-6xl">
-          <div data-panel className="w-full max-w-[480px] rounded-[28px] border border-white/10 bg-dusk/70 p-6 text-cream shadow-soft backdrop-blur-xl sm:p-8">
+      <div className="sticky top-0 flex h-[100svh] flex-col justify-end px-3 pb-3 pt-24 side:justify-center side:px-6 side:pb-0 short:pt-20">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-center side:items-start">
+          <div data-panel data-lenis-prevent className={`${sheet} max-w-[560px] rounded-[28px] border border-white/10 bg-dusk/70 text-cream shadow-soft backdrop-blur-xl side:max-w-[480px]`}>
             <div data-reveal>
               <Eyebrow dark>{contact.eyebrow}</Eyebrow>
             </div>
@@ -451,7 +453,7 @@ function Contact() {
               {site.location} · Or click the glowing mailbox ✉
             </p>
           </div>
-          <footer className="mt-4 flex flex-wrap items-center justify-between gap-2 px-2 text-xs text-cream/60">
+          <footer className="mt-3 flex w-full flex-wrap items-center justify-between gap-2 px-2 text-xs text-cream/60 short:hidden">
             <span>
               © {new Date().getFullYear()} {site.name}. Every leaf, loaf and lantern hand-built in code.
             </span>

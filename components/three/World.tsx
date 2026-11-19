@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { EffectComposer, Bloom, Vignette, DepthOfField } from '@react-three/postprocessing';
 import type { DepthOfFieldEffect } from 'postprocessing';
-import { world } from '@/lib/store';
+import { world, fallBackToStills } from '@/lib/store';
 import { cameraAt, flashAt, zoneAt, STATION_G, stationOf, INTERIOR_Y, ROOM_X } from '@/lib/journey';
 import { shared } from './materials';
 import { Exterior, skyUniforms, celestial, LANTERNS, MAILBOX } from './Exterior';
@@ -49,9 +49,17 @@ const SKY = {
   nightHorizon: c('#34477a'),
 };
 
+/** Focus point of each room for portrait screens (where the panel sits at the bottom). */
+const PORTRAIT_FOCUS = [-1.4, 0.0, 1.3, -0.9];
+
 export function World({ tier }: { tier: 'high' | 'low' }) {
-  const { camera, scene, size } = useThree();
+  const { camera, scene, size, gl } = useThree();
   const hi = tier === 'high';
+  // respect what this GPU can actually do
+  const caps = gl.capabilities;
+  const samples = Math.min(4, (caps as unknown as { maxSamples?: number }).maxSamples ?? 4);
+  const shadowSize = hi ? (caps.maxTextureSize >= 8192 ? 4096 : 2048) : 1024;
+  const errors = useRef(0);
 
   const exterior = useRef<THREE.Group>(null);
   const interior = useRef<THREE.Group>(null);
@@ -83,6 +91,14 @@ export function World({ tier }: { tier: 'high' | 'low' }) {
   const lastStation = useRef(-1);
 
   useFrame((state, delta) => {
+    try {
+      frame(state, delta);
+    } catch (err) {
+      if (++errors.current === 3) fallBackToStills(String((err as Error)?.message ?? err));
+    }
+  });
+
+  function frame(state: { clock: THREE.Clock }, delta: number) {
     const dt = Math.min(delta, 0.05);
     shared.uTime.value = state.clock.elapsedTime;
     shared.uWind.value = world.reduced ? 0 : 1;
@@ -118,13 +134,31 @@ export function World({ tier }: { tier: 'high' | 'low' }) {
 
     // --- camera --------------------------------------------------------------
     cameraAt(g, tmp.pos, tmp.look);
-    // portrait screens: centre the cottage and lift it above the hero text
+    // portrait screens: the text panel sits at the bottom, so frame each
+    // subject centred and high in the shot, and step back a little
     const aspectNow = size.width / size.height;
-    if (aspectNow < 0.9 && g < 0.6) {
-      const w = 1 - THREE.MathUtils.smoothstep(g, 0.0, 0.5);
-      tmp.look.x += 2.9 * w;
-      tmp.look.y -= 1.6 * w;
-      tmp.pos.z += 3 * w;
+    if (aspectNow < 0.9) {
+      if (g < 0.6) {
+        const w = 1 - THREE.MathUtils.smoothstep(g, 0.0, 0.5);
+        tmp.look.x += 2.9 * w;
+        tmp.look.y -= 1.6 * w;
+        tmp.pos.z += 3 * w;
+      } else if (g > 0.93 && g < 4.88) {
+        const f = THREE.MathUtils.clamp(g - 1, 0, 3);
+        const i = Math.round(f);
+        // weight is 1 while holding in a room, 0 while walking through a doorway
+        const hold = 1 - THREE.MathUtils.smoothstep(Math.abs(f - i), 0.3, 0.5);
+        const fx = ROOM_X[i] + PORTRAIT_FOCUS[i];
+        tmp.look.x += (fx - tmp.look.x) * hold;
+        tmp.pos.x += (fx - tmp.pos.x) * 0.85 * hold;
+        tmp.pos.z += 1.6 * hold;
+        tmp.pos.y += 0.35 * hold;
+        tmp.look.y -= 0.9 * hold;
+      } else if (g >= 4.88) {
+        tmp.look.x += (MAILBOX[0] - 0.4 - tmp.look.x) * 0.8;
+        tmp.look.y -= 1.0;
+        tmp.pos.z += 2.5;
+      }
     }
     const px = world.reduced ? 0 : world.pointerSmooth.x;
     const py = world.reduced ? 0 : world.pointerSmooth.y;
@@ -227,7 +261,7 @@ export function World({ tier }: { tier: 'high' | 'low' }) {
       else tmp.focus.copy(tmp.look);
       dof.current.target = tmp.focus;
     }
-  });
+  }
 
   return (
     <>
@@ -236,8 +270,8 @@ export function World({ tier }: { tier: 'high' | 'low' }) {
         ref={sun}
         castShadow={hi}
         intensity={2.6}
-        shadow-mapSize-width={hi ? 4096 : 1024}
-        shadow-mapSize-height={hi ? 4096 : 1024}
+        shadow-mapSize-width={shadowSize}
+        shadow-mapSize-height={shadowSize}
         shadow-camera-left={-14}
         shadow-camera-right={14}
         shadow-camera-top={14}
@@ -259,7 +293,7 @@ export function World({ tier }: { tier: 'high' | 'low' }) {
       </group>
 
       {hi && (
-        <EffectComposer multisampling={8}>
+        <EffectComposer multisampling={samples}>
           <DepthOfField ref={dof} worldFocusRange={9} bokehScale={1.5} />
           <Bloom mipmapBlur intensity={0.55} luminanceThreshold={0.9} luminanceSmoothing={0.2} />
           <Vignette eskil={false} offset={0.25} darkness={0.45} />

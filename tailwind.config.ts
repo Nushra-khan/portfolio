@@ -4,6 +4,11 @@ export default {
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      screens: {
+        // "side" layout: panels beside the scene (desktops, landscape tablets & phones)
+        side: { raw: '(orientation: landscape) and (min-width: 640px)' },
+        short: { raw: '(max-height: 560px)' },
+      },
       colors: {
         cream: '#FBF5E9',
         parchment: '#F3E9D4',

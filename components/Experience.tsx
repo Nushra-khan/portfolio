@@ -26,7 +26,10 @@ function detectTier(): Tier {
 
   const canvas = document.createElement('canvas');
   const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-  if (!gl) return 'lite';
+  if (!gl) {
+    setTimeout(() => setUI({ notice: '3D isn’t available in this browser, so you’re seeing the illustrated version.' }), 0);
+    return 'lite';
+  }
   const nav_ = navigator as Navigator & { deviceMemory?: number; connection?: { saveData?: boolean } };
   if (nav_.connection?.saveData) return 'lite';
   const coarse = matchMedia('(pointer: coarse)').matches;
@@ -95,7 +98,8 @@ export default function Experience() {
     let raf: ((t: number) => void) | null = null;
 
     if (!world.reduced) {
-      lenis = new Lenis({ lerp: 0.065, wheelMultiplier: 0.8, touchMultiplier: 1.2, smoothWheel: true, syncTouch: true, syncTouchLerp: 0.075 });
+      // smooth wheel/trackpad on desktop; phones keep their native momentum scrolling
+      lenis = new Lenis({ lerp: 0.065, wheelMultiplier: 0.8, smoothWheel: true, syncTouch: false });
       lenis.on('scroll', ScrollTrigger.update);
       raf = (time: number) => lenis!.raf(time * 1000);
       gsap.ticker.add(raf);
@@ -160,8 +164,22 @@ export default function Experience() {
       {!capture && <Nav />}
       <Sections hidden={capture} />
       {!capture && <Tooltip />}
+      {!capture && <Notice />}
       <Curtain />
     </>
+  );
+}
+
+function Notice() {
+  const notice = useUI((s) => s.notice);
+  if (!notice) return null;
+  return (
+    <div role="status" className="fixed inset-x-3 bottom-3 z-[55] mx-auto flex max-w-md items-center gap-3 rounded-2xl bg-ink/90 px-4 py-3 text-[13px] text-cream shadow-soft backdrop-blur sm:bottom-5">
+      <span className="flex-1">{notice}</span>
+      <button onClick={() => setUI({ notice: null })} className="rounded-full px-2 py-1 text-cream/70 hover:text-cream" aria-label="Dismiss">
+        ✕
+      </button>
+    </div>
   );
 }
 

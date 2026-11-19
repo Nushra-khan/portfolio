@@ -20,7 +20,7 @@ export function Nav() {
     try {
       localStorage.setItem('alw-tier', next);
     } catch {}
-    setUI({ tier: next, entered: true });
+    setUI({ tier: next, entered: true, notice: null });
   };
 
   return (
@@ -39,7 +39,7 @@ export function Nav() {
               <path d="M10.5 19v-4.5h3V19" />
             </svg>
           </span>
-          <span className="hidden font-serif text-[15px] leading-none sm:block">
+          <span className="hidden font-serif text-[15px] leading-none [@media(min-width:360px)]:block">
             {site.name}
             <span className="block pt-0.5 font-sans text-[10px] uppercase tracking-[0.18em] opacity-60">A little world</span>
           </span>

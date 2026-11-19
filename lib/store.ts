@@ -33,9 +33,10 @@ type UIState = {
   tier: Tier;
   entered: boolean;
   focusedRecipe: string | null;
+  notice: string | null;
 };
 
-let ui: UIState = { active: 0, hovered: null, tier: 'high', entered: false, focusedRecipe: null };
+let ui: UIState = { active: 0, hovered: null, tier: 'high', entered: false, focusedRecipe: null, notice: null };
 const listeners = new Set<() => void>();
 
 export function setUI(patch: Partial<UIState>) {
@@ -105,3 +106,10 @@ export function playBell() {
   }
   world.bell = 1;
 }
+
+/** Switches to the illustrated (no-3D) version and tells the visitor why. */
+export function fallBackToStills(reason: string) {
+  console.warn('[A Little World] 3D disabled:', reason);
+  setUI({ tier: 'lite', entered: true, notice: '3D isn’t available in this browser, so you’re seeing the illustrated version.' });
+}
+
