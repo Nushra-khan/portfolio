@@ -34,9 +34,10 @@ type UIState = {
   entered: boolean;
   focusedRecipe: string | null;
   notice: string | null;
+  sound: boolean;
 };
 
-let ui: UIState = { active: 0, hovered: null, tier: 'high', entered: false, focusedRecipe: null, notice: null };
+let ui: UIState = { active: 0, hovered: null, tier: 'high', entered: false, focusedRecipe: null, notice: null, sound: false };
 const listeners = new Set<() => void>();
 
 export function setUI(patch: Partial<UIState>) {

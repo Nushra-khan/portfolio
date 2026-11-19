@@ -6,7 +6,9 @@ import Lenis from 'lenis';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { world, setUI, nav, useUI, type Tier } from '@/lib/store';
-import { stationOf } from '@/lib/journey';
+import { stationOf, zoneAt } from '@/lib/journey';
+import { ambience } from '@/lib/ambience';
+import { getUI } from '@/lib/store';
 import { sections } from '@/content/site';
 import { Nav } from './ui/Nav';
 import { Sections } from './ui/Sections';
@@ -128,6 +130,8 @@ export default function Experience() {
       const y = lenis ? lenis.scroll : scrollY;
       if (!world.lock) world.g = scrollToG(y, pts);
       setUI({ active: stationOf(world.g) });
+      const s = getUI();
+      if (s.sound) ambience.setZone(zoneAt(s.tier === 'lite' ? world.g : world.gSmooth));
     };
     gsap.ticker.add(tick);
 

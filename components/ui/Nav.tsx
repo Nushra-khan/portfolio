@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { nav, setUI, useUI } from '@/lib/store';
+import { nav, setUI, useUI, world } from '@/lib/store';
+import { ambience } from '@/lib/ambience';
+import { zoneAt } from '@/lib/journey';
 import { sections, site } from '@/content/site';
 
 export function Nav() {
@@ -13,6 +15,18 @@ export function Nav() {
   const go = (id: string) => {
     setOpen(false);
     nav.scrollTo(id);
+  };
+
+  const sound = useUI((s) => s.sound);
+  const toggleSound = () => {
+    if (sound) {
+      ambience.stop();
+      setUI({ sound: false });
+    } else {
+      ambience.setZone(zoneAt(world.gSmooth || world.g));
+      ambience.start();
+      setUI({ sound: true });
+    }
   };
 
   const toggleLite = () => {
@@ -41,7 +55,7 @@ export function Nav() {
           </span>
           <span className="hidden font-serif text-[15px] leading-none [@media(min-width:360px)]:block">
             {site.name}
-            <span className="block pt-0.5 font-sans text-[10px] uppercase tracking-[0.18em] opacity-60">A little world</span>
+            <span className="hidden whitespace-nowrap pt-0.5 font-sans [@media(min-width:400px)]:block text-[9px] uppercase tracking-[0.14em] opacity-60 sm:text-[10px] sm:tracking-[0.18em]">A little world</span>
           </span>
         </button>
 
@@ -73,6 +87,16 @@ export function Nav() {
           >
             <span className={`h-2 w-2 rounded-full ${tier === 'lite' ? 'bg-honey' : 'bg-moss'}`} />
             {tier === 'lite' ? 'Simple' : '3D'}
+          </button>
+          <button
+            onClick={toggleSound}
+            aria-pressed={sound}
+            aria-label={sound ? 'Turn off forest sounds' : 'Turn on soft forest sounds'}
+            title={sound ? 'Turn off forest sounds' : 'Soft forest sounds'}
+            className={`flex h-9 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium sm:px-3 ${night ? 'hover:bg-white/10' : 'hover:bg-ink/5'} ${sound ? (night ? 'bg-white/15' : 'bg-ink/[0.07]') : ''}`}
+          >
+            <SoundIcon on={sound} />
+            <span className="hidden lg:inline">{sound ? 'Sound on' : 'Sound'}</span>
           </button>
           <a
             href={site.resumeUrl}
@@ -137,5 +161,25 @@ export function Nav() {
         ))}
       </ol>
     </header>
+  );
+}
+
+function SoundIcon({ on }: { on: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5Z" />
+      {on ? (
+        <>
+          <path d="M15.5 9.2a4 4 0 0 1 0 5.6">
+            <animate attributeName="opacity" values="1;0.4;1" dur="2.4s" repeatCount="indefinite" />
+          </path>
+          <path d="M18 6.8a7.5 7.5 0 0 1 0 10.4">
+            <animate attributeName="opacity" values="0.4;1;0.4" dur="2.4s" repeatCount="indefinite" />
+          </path>
+        </>
+      ) : (
+        <path d="m16 10 4 4m0-4-4 4" />
+      )}
+    </svg>
   );
 }
