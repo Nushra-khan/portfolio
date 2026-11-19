@@ -1,0 +1,50 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import { useUI } from '@/lib/store';
+import { recipes, research } from '@/content/site';
+
+function labelFor(id: string | null): string | null {
+  if (!id) return null;
+  if (id === 'bell') return 'Ring the bell & come in';
+  if (id === 'laptop') return 'Peek at my work →';
+  if (id === 'robot') return 'Beep boop — that’s Bolt';
+  if (id === 'mailbox') return 'Send me a letter ✉';
+  if (id === 'bismillah') return 'Bismillah — In the name of God, the Most Gracious, the Most Merciful';
+  if (id === 'medals') return 'Two gold medals 🏅🏅';
+  if (id.startsWith('research:')) {
+    const r = research.find((x) => `research:${x.id}` === id);
+    return r ? `${r.kind}: ${r.title}` : null;
+  }
+  if (id.startsWith('recipe:')) {
+    const r = recipes.find((x) => `recipe:${x.id}` === id);
+    return r ? `${r.title} — tap for the recipe` : null;
+  }
+  return null;
+}
+
+/** Small label that follows the cursor while hovering interactive 3D objects. */
+export function Tooltip() {
+  const hovered = useUI((s) => s.hovered);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const move = (e: PointerEvent) => {
+      if (ref.current) ref.current.style.transform = `translate(${e.clientX + 16}px, ${e.clientY + 18}px)`;
+    };
+    addEventListener('pointermove', move, { passive: true });
+    return () => removeEventListener('pointermove', move);
+  }, []);
+  const label = labelFor(hovered);
+  return (
+    <div
+      ref={ref}
+      role="status"
+      aria-live="polite"
+      className={`pointer-events-none fixed left-0 top-0 z-[70] hidden rounded-full bg-ink px-3.5 py-1.5 text-[13px] font-medium text-cream shadow-soft transition-opacity duration-200 md:block ${
+        label ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
+      {label}
+    </div>
+  );
+}
