@@ -3,6 +3,7 @@ import './globals.css';
 import { site } from '@/content/site';
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://portfolio-jet-kappa-72.vercel.app'),
   title: `${site.title} — ${site.name}`,
   description: `${site.name}: ${site.role}. ${site.tagline}`,
   openGraph: {

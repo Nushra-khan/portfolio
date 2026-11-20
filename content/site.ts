@@ -10,12 +10,12 @@ export const site = {
   role: 'Creative software developer & home cook',
   tagline: 'Curious what’s inside? Ring the bell and come on in!',
   resumeUrl: '/resume.pdf',
-  email: 'hello@yourname.dev',
+  email: 'nushrakhan312@gmail.com',
   location: 'India · open to remote',
   socials: [
-    { label: 'GitHub', href: 'https://github.com/your-handle' },
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/your-handle' },
-    { label: 'Email', href: 'mailto:hello@yourname.dev' },
+    { label: 'GitHub', href: 'https://github.com/Nushra-khan' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/nushra-khan' },
+    { label: 'Email', href: 'mailto:nushrakhan312@gmail.com' },
   ],
 };
 
@@ -93,47 +93,67 @@ export const projects: Project[] = [
 
 export type Research = {
   id: string;
-  kind: 'Paper' | 'Award' | 'Interest' | 'Talk';
+  kind: 'Conference paper' | 'Book chapter';
+  status?: 'Accepted' | 'Under review' | 'Published';
+  date: string;
   title: string;
   venue: string;
-  blurb: string;
+  publisher: string;
+  /** Optional link (DOI, publisher page, arXiv…) — add one when it's available. */
   href?: string;
+  /** Cover colour of this paper's book on the library table. */
   color: string;
 };
 
+/** Each entry becomes a book on the library's display table. */
 export const research: Research[] = [
   {
-    id: 'r1',
-    kind: 'Paper',
-    title: 'Efficient Retrieval for On-Device Assistants',
-    venue: 'Workshop paper · 2026',
-    blurb: 'Compressing embedding indexes so search runs comfortably on a phone.',
-    href: 'https://arxiv.org/',
+    id: 'mental-health-stacking',
+    kind: 'Conference paper',
+    status: 'Accepted',
+    date: 'Oct 2026',
+    title: 'Multiclass Mental Health Classification Using Nested Validation and Stacking Ensemble',
+    venue: 'IEEE International Conference on Secure and Intelligent Digital Ecosystems (SIDE’26)',
+    publisher: 'Springer Nature · STEAM-H',
     color: '#8C3B3B',
   },
   {
-    id: 'r2',
-    kind: 'Award',
-    title: 'Best Student Project',
-    venue: 'University tech fest · 2025',
-    blurb: 'For an accessible campus navigation app used by 3,000+ students.',
+    id: 'diabetic-retinopathy',
+    kind: 'Conference paper',
+    status: 'Accepted',
+    date: 'Oct 2026',
+    title: 'Automated Binary Screening of Diabetic Retinopathy Using EfficientNet-B3 with CLAHE and Grad-CAM-Based Explainability',
+    venue: '3rd International Conference on Next Generation Communication and Computing',
+    publisher: 'Springer',
     color: '#3B5B8C',
   },
   {
-    id: 'r3',
-    kind: 'Talk',
-    title: 'Making the Web Feel Handmade',
-    venue: 'Local JS meetup · 2025',
-    blurb: 'On motion, restraint and why small details make software feel warm.',
-    href: 'https://youtube.com/',
+    id: 'mental-health-hybrid',
+    kind: 'Conference paper',
+    status: 'Under review',
+    date: 'Nov 2026',
+    title: 'Hybrid Ensemble Learning for Binary and Multiclass Classification of Mental Health',
+    venue: '8th International Conference on Artificial Intelligence and Speech Technology',
+    publisher: 'Springer',
+    color: '#6B4A7A',
+  },
+  {
+    id: 'biodiversity-review',
+    kind: 'Conference paper',
+    status: 'Under review',
+    date: '2027',
+    title: 'Learning with Limited Data under Privacy Constraints: A Review of Machine Learning for Biodiversity Monitoring',
+    venue: 'International Conference on Emerging Smart Technology for Sustainable Development (ESTSD-2027)',
+    publisher: '',
     color: '#4F6B3A',
   },
   {
-    id: 'r4',
-    kind: 'Interest',
-    title: 'Human-centred ML & Graphics',
-    venue: 'Ongoing reading',
-    blurb: 'Interpretability, procedural generation and tools for creative people.',
+    id: 'hvac-air-purification',
+    kind: 'Book chapter',
+    date: 'Jul 2026',
+    title: 'AI Applications in HVAC Systems for Indoor Air Purification',
+    venue: 'Smart Approaches to Air Remediation: AI Applications in Air Pollution Control and Monitoring',
+    publisher: 'Bentham Science',
     color: '#9C6B2E',
   },
 ];

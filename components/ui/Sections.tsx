@@ -292,23 +292,40 @@ function Research() {
               <Eyebrow>The library</Eyebrow>
             </div>
             <h2 id="research-h" data-reveal className="font-serif text-[clamp(1.6rem,3vw,2.3rem)] font-[450] leading-tight text-ink">
-              Research, recognition &amp; rabbit holes
+              Publications &amp; research
             </h2>
-            <ul className="mt-5 space-y-2">
+            <p data-reveal className="mt-1 text-[13.5px] text-ink/60">
+              Machine learning for health, vision and the planet.
+            </p>
+            <ul className="mt-4 space-y-1.5">
               {research.map((r) => {
                 const on = hovered === `research:${r.id}`;
                 const Inner = (
                   <>
-                    <span className="mt-1 h-10 w-1.5 shrink-0 rounded-full" style={{ background: r.color }} />
+                    <span className="mt-1 w-1.5 shrink-0 self-stretch rounded-full" style={{ background: r.color }} />
                     <span className="min-w-0">
-                      <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink/50">
-                        {r.kind} · {r.venue}
+                      <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-ink/50">
+                        <span>{r.kind}</span>
+                        <span aria-hidden>·</span>
+                        <span>{r.date}</span>
+                        {r.status && (
+                          <span
+                            className={`rounded-full px-2 py-0.5 text-[10px] tracking-[0.08em] ${
+                              r.status === 'Under review' ? 'bg-honey/25 text-[#8a5a12]' : 'bg-moss/15 text-moss'
+                            }`}
+                          >
+                            {r.status}
+                          </span>
+                        )}
                       </span>
-                      <span className="mt-0.5 block font-serif text-[17px] leading-snug text-ink">{r.title}</span>
-                      <span className="mt-1 block text-[13.5px] leading-relaxed text-ink/70">{r.blurb}</span>
+                      <span className="mt-1 block font-serif text-[16px] leading-snug text-ink">{r.title}</span>
+                      <span className="mt-1 block text-[12.5px] leading-relaxed text-ink/65">
+                        {r.venue}
+                        {r.publisher ? <span className="text-ink/45"> — {r.publisher}</span> : null}
+                      </span>
                     </span>
                     {r.href && (
-                      <span className="ml-auto mt-1 text-ink/40">
+                      <span className="ml-auto mt-1 shrink-0 text-ink/40">
                         <ArrowIcon />
                       </span>
                     )}
@@ -334,7 +351,7 @@ function Research() {
               })}
             </ul>
             <p data-reveal className="mt-4 hidden text-xs italic text-ink/50 [@media(hover:hover)]:block">
-              Each book on the table is one of these — hover to pull it off the shelf.
+              Each book on the table is one of these — hover a title to lift it.
             </p>
           </div>
         </div>

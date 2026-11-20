@@ -739,7 +739,7 @@ function Library() {
         ))}
         <mesh position={[0, 0.88, 0]} geometry={geo.box} scale={[1.8, 0.06, 0.4]} material={paint('#2f4f4f')} />
         {research.map((item, i) => (
-          <FeatureBook key={item.id} item={item} position={[-0.6 + i * 0.4, 0.91, 0.05]} rot={(i - 1.5) * 0.12} />
+          <FeatureBook key={item.id} item={item} position={[(i - (research.length - 1) / 2) * Math.min(0.4, 1.5 / research.length), 0.91, 0.05]} rot={(i - (research.length - 1) / 2) * 0.1} />
         ))}
         {/* candle */}
         <group position={[0.8, 0.84, 0.25]}>

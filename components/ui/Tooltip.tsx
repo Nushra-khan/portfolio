@@ -14,7 +14,7 @@ function labelFor(id: string | null): string | null {
   if (id === 'medals') return 'Two gold medals 🏅🏅';
   if (id.startsWith('research:')) {
     const r = research.find((x) => `research:${x.id}` === id);
-    return r ? `${r.kind}: ${r.title}` : null;
+    return r ? `${r.kind}${r.status ? ` · ${r.status}` : ''}: ${r.title.length > 70 ? r.title.slice(0, 68) + '…' : r.title}` : null;
   }
   if (id.startsWith('recipe:')) {
     const r = recipes.find((x) => `recipe:${x.id}` === id);
