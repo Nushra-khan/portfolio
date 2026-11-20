@@ -243,9 +243,7 @@ function Recognition() {
               hovered === a.id || (a.id === 'gold-medals' && hovered === 'medals') ? 'bg-honey/15' : 'bg-white/40'
             }`}
           >
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-honey/30 text-lg" aria-hidden>
-              {a.id === 'gold-medals' ? '🥇' : '🏆'}
-            </span>
+            <span className="mt-1 w-1.5 shrink-0 self-stretch rounded-full bg-honey" aria-hidden />
             <span>
               <span className="block font-serif text-[16.5px] leading-snug text-ink">{a.title}</span>
               <span className="mt-0.5 block text-[12.5px] text-ink/60">{a.detail}</span>
@@ -542,7 +540,7 @@ function Contact() {
               </li>
             </ul>
             <p data-reveal className="mt-6 text-xs text-cream/45">
-              {site.location} · Or click the glowing mailbox ✉
+              {site.location} · Or click the glowing mailbox
             </p>
           </div>
           <footer className="mt-3 flex w-full flex-wrap items-center justify-between gap-2 px-2 text-xs text-cream/60 short:hidden">

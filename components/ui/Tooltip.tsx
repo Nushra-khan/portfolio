@@ -9,14 +9,14 @@ function labelFor(id: string | null): string | null {
   if (id === 'bell') return 'Ring the bell & come in';
   if (id === 'laptop') return 'Peek at my work →';
   if (id === 'robot') return 'Beep boop — that’s Bolt';
-  if (id === 'mailbox') return 'Send me a letter ✉';
+  if (id === 'mailbox') return 'Send me a letter';
   if (id === 'bismillah') return 'Bismillah — In the name of God, the Most Gracious, the Most Merciful';
-  if (id === 'best-website') return 'Workshop Winner — Best Website 🏆';
+  if (id === 'best-website') return 'Workshop Winner — Best Website';
   if (id.startsWith('role:')) {
     const r = leadership.find((x) => `role:${x.id}` === id);
     return r ? `${r.title} · ${r.dates}` : null;
   }
-  if (id === 'medals') return 'Two gold medals 🏅🏅';
+  if (id === 'medals') return 'Two gold medals';
   if (id.startsWith('research:')) {
     const r = research.find((x) => `research:${x.id}` === id);
     return r ? `${r.kind}${r.status ? ` · ${r.status}` : ''}: ${r.title.length > 70 ? r.title.slice(0, 68) + '…' : r.title}` : null;
