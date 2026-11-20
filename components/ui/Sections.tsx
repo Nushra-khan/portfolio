@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { about, achievements, contact, experience, leadership, projects, recipes, research, site, skillGroups, skillId } from '@/content/site';
+import { about, achievements, contact, experience, leadership, projects, recipes, research, site, skillGroups } from '@/content/site';
 import { nav, playBell, setUI, useUI } from '@/lib/store';
 import { BellIcon } from '../Experience';
 
@@ -108,7 +108,7 @@ export function Sections({ hidden = false }: { hidden?: boolean }) {
         wt.set({}, {}, 0)
           .set('[data-cards] [data-pe], [data-cards] article', { pointerEvents: 'none' }, 0)
           .to('[data-skills]', { opacity: 0, y: -24, duration: 0.06, ease: 'power1.inOut' }, 0.34)
-          .set('[data-skills] [data-panel]', { pointerEvents: 'none' }, 0.36)
+          .set('[data-skills] [data-panel], [data-skills] [data-caption]', { pointerEvents: 'none' }, 0.36)
           .fromTo('[data-cards]', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.07, ease: 'power1.out', immediateRender: false }, 0.39)
           .set('[data-cards] [data-pe], [data-cards] article', { pointerEvents: 'auto' }, 0.4)
           .to(t, { x: () => -Math.max(0, t.scrollWidth - t.parentElement!.clientWidth), ease: 'none', duration: 0.5 }, 0.48)
@@ -286,24 +286,41 @@ function Recognition() {
   );
 }
 
-/** First half of the workshop: the skill-jar shelf, mirrored as readable chips. */
+/**
+ * First half of the workshop: the skills chalkboard.
+ * Landscape screens read the board itself (with a small caption card);
+ * phones get the same skills as chips, since the board is too wide to read there.
+ */
 function Toolkit() {
-  const hovered = useUI((s) => s.hovered);
   return (
-    <div
-      data-skills
-      className="pointer-events-none absolute inset-0 flex items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20"
-    >
-      <div className="mx-auto flex w-full max-w-6xl justify-center side:justify-start">
-        <div data-panel data-lenis-prevent aria-labelledby="skills-h" className={`${panel} ${sheet} max-w-[560px] side:max-w-[400px]`}>
+    <div data-skills className="pointer-events-none absolute inset-0">
+      {/* landscape: compact caption, the board does the talking */}
+      <div className="absolute inset-x-0 bottom-0 hidden px-6 pb-6 side:block short:pb-3">
+        <div className="mx-auto w-full max-w-6xl">
+          <div data-caption className={`${panel} inline-block px-5 py-3.5 short:py-2`}>
+            <Eyebrow>The workshop</Eyebrow>
+            <h2 id="skills-h" className="font-serif text-[clamp(1.4rem,2.4vw,1.9rem)] font-[450] leading-tight text-ink">
+              My toolkit
+            </h2>
+            <p className="mt-0.5 text-[13px] text-ink/60 short:hidden">Everything I build with, chalked up on the board.</p>
+            <ul className="sr-only">
+              {skillGroups.map((g) => (
+                <li key={g.id}>
+                  {g.title}: {g.skills.join(', ')}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+      {/* portrait: the full list as chips */}
+      <div className="absolute inset-0 flex items-end px-3 pb-3 pt-24 side:hidden">
+        <div data-panel data-lenis-prevent aria-labelledby="skills-h-m" className={`${panel} ${sheet} mx-auto max-w-[560px]`}>
           <Eyebrow>The workshop</Eyebrow>
-          <h2 id="skills-h" className="font-serif text-[clamp(1.6rem,3vw,2.3rem)] font-[450] leading-tight text-ink">
+          <h2 id="skills-h-m" className="font-serif text-[clamp(1.6rem,3vw,2.3rem)] font-[450] leading-tight text-ink">
             My toolkit
           </h2>
-          <p className="mt-1 text-[13.5px] leading-relaxed text-ink/60">
-            Every jar on the shelf is something I build with. Hover a skill to find its jar.
-          </p>
-          <div className="mt-4 space-y-3.5">
+          <div className="mt-3 space-y-3">
             {skillGroups.map((g) => (
               <div key={g.id}>
                 <p className="mb-1.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink/55">
@@ -311,24 +328,11 @@ function Toolkit() {
                   {g.title}
                 </p>
                 <ul className="flex flex-wrap gap-1.5">
-                  {g.skills.map((name) => {
-                    const id = skillId(name);
-                    const on = hovered === id;
-                    return (
-                      <li
-                        key={name}
-                        onMouseEnter={() => setUI({ hovered: id })}
-                        onMouseLeave={() => setUI({ hovered: null })}
-                        className="rounded-full border px-2.5 py-1 text-[12.5px] font-medium text-ink/80 transition"
-                        style={{
-                          borderColor: on ? g.color : 'rgba(43,42,38,0.12)',
-                          background: on ? `${g.color}33` : 'rgba(255,255,255,0.45)',
-                        }}
-                      >
-                        {name}
-                      </li>
-                    );
-                  })}
+                  {g.skills.map((name) => (
+                    <li key={name} className="rounded-full border border-ink/10 bg-white/45 px-2.5 py-1 text-[12.5px] font-medium text-ink/80">
+                      {name}
+                    </li>
+                  ))}
                 </ul>
               </div>
             ))}

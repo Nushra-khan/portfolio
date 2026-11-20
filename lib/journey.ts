@@ -35,9 +35,9 @@ const keys: Key[] = [
   { g: 1.86, pos: [6.6, Y + 1.7, 3.2], look: [10.5, Y + 1.5, 2.6] },
   { g: 1.96, pos: [9.6, Y + 1.75, 3.3], look: [14.5, Y + 1.35, 0] },
   // Projects — the workshop
-  // sweep along the apothecary shelf of skill jars…
-  { g: 2.06, pos: [11.8, Y + 2.85, 0.7], look: [12.0, Y + 2.95, -4.8] },
-  { g: 2.25, pos: [17.1, Y + 2.85, 0.7], look: [17.4, Y + 2.95, -4.8] },
+  // glide slowly across the skills chalkboard…
+  { g: 2.06, pos: [15.25, Y + 2.62, 0.45], look: [15.3, Y + 2.58, -4.8] },
+  { g: 2.25, pos: [16.75, Y + 2.62, 0.45], look: [16.7, Y + 2.58, -4.8] },
   // …then step back to the workbench for the project cards
   { g: 2.36, pos: [15.6, Y + 2.15, 5.0], look: [16.0, Y + 0.95, -2] },
   { g: 2.7, pos: [16.6, Y + 2.05, 4.7], look: [16.4, Y + 0.95, -2] },

@@ -11,6 +11,22 @@
   src: url('/fonts/amiri-arabic-700.woff2') format('woff2');
 }
 
+/* Caveat (SIL Open Font License) — handwriting for the workshop chalkboard */
+@font-face {
+  font-family: 'Caveat Chalk';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/caveat-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Caveat Chalk';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/caveat-700.woff2') format('woff2');
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

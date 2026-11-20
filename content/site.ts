@@ -92,7 +92,7 @@ export type SkillGroup = {
   skills: string[];
 };
 
-/** Each skill is a labelled jar on the workshop's apothecary shelf (top shelf first). */
+/** Written on the workshop chalkboard (3 × 3 grid, in this order) and listed in the toolkit panel. */
 export const skillGroups: SkillGroup[] = [
   { id: 'languages', title: 'Languages', color: '#E7B45A', skills: ['Python', 'JavaScript', 'TypeScript', 'Java', 'Kotlin', 'Dart', 'C', 'SQL', 'HTML', 'CSS'] },
   { id: 'design', title: 'Design', color: '#E58FB0', skills: ['Figma', 'Framer', 'Canva'] },
@@ -114,12 +114,6 @@ export const skillGroups: SkillGroup[] = [
     skills: ['Machine Learning', 'Generative AI', 'Agentic AI', 'LLMs', 'RAG', 'LangChain', 'LangGraph', 'NLP', 'PyTorch', 'Transformers', 'Embeddings', 'Data Analysis'],
   },
 ];
-
-/** Stable id for a skill, shared by the 3D jar and the skill chip. */
-export const skillId = (name: string) => 'skill:' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-
-/** Which groups sit on which shelf, top to bottom. */
-export const skillShelves: string[][] = [['languages', 'design'], ['frontend', 'backend', 'payments'], ['data', 'cloud', 'tools'], ['ai']];
 
 export type Experience = {
   id: 'foundrfuse' | 'iiitk';

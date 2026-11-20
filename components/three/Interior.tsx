@@ -12,7 +12,7 @@ import { setUI, nav, useUI } from '@/lib/store';
 import { research, recipes } from '@/content/site';
 import { Calligraphy, PrayerMat, QuranStand, zelligeTexture } from './Heritage';
 import { RecognitionShelf } from './Recognition';
-import { SkillJars } from './SkillJars';
+import { Chalkboard } from './Chalkboard';
 import { ExperienceNook, AppPhone } from './Career';
 
 const H = 4.4; // ceiling
@@ -623,8 +623,8 @@ function Workshop() {
           <planeGeometry args={[0.5, 0.36]} />
         </mesh>
       </group>
-      {/* apothecary shelf: one labelled jar per skill */}
-      <SkillJars position={[0, 0, -4.62]} />
+      {/* chalkboard with every skill group, hand-lettered */}
+      <Chalkboard position={[0, 2.8, -4.82]} />
       {/* drafting easel */}
       <group position={[-3.4, 0, -2.4]} rotation={[0, 0.5, 0]}>
         {[-0.4, 0.4].map((x) => (
