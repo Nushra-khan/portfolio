@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { about, contact, projects, recipes, research, site } from '@/content/site';
+import { about, achievements, contact, leadership, projects, recipes, research, site } from '@/content/site';
 import { nav, playBell, setUI, useUI } from '@/lib/store';
 import { BellIcon } from '../Experience';
 
@@ -74,6 +74,20 @@ export function Sections({ hidden = false }: { hidden?: boolean }) {
           },
         );
       });
+
+      // about: as the camera turns to the recognition wall, swap the panels
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '#about', start: 'top top', end: 'bottom bottom', scrub: 0.8 },
+      });
+      tl.set({}, {}, 0)
+        .to('[data-about-1]', { opacity: 0, y: -24, pointerEvents: 'none', duration: 0.08, ease: 'power1.inOut' }, 0.33)
+        .fromTo(
+          '[data-about-2]',
+          { opacity: 0, y: 24, pointerEvents: 'none' },
+          { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.1, ease: 'power1.out', immediateRender: false },
+          0.4,
+        )
+        .set({}, {}, 1);
 
       // projects: scroll moves the cards sideways along the workbench
       const t = track.current;
@@ -162,10 +176,10 @@ function Welcome() {
 
 function About() {
   return (
-    <section id="about" className="relative h-[230vh]" aria-labelledby="about-h">
+    <section id="about" className="relative h-[340vh]" aria-labelledby="about-h">
       <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
-        <div className="mx-auto flex w-full max-w-6xl justify-center side:justify-end">
-          <div data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] side:max-w-[440px]`}>
+        <div className="mx-auto grid w-full max-w-6xl justify-items-center side:justify-items-end">
+          <div data-about-1 data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] [grid-area:1/1] side:max-w-[440px]`}>
             <div data-reveal>
               <Eyebrow>{about.eyebrow}</Eyebrow>
             </div>
@@ -197,9 +211,70 @@ function About() {
               Psst — hover the laptop on the desk.
             </p>
           </div>
+          <Recognition />
         </div>
       </div>
     </section>
+  );
+}
+
+/** Second About panel — appears as the camera turns to the recognition wall. */
+function Recognition() {
+  const hovered = useUI((s) => s.hovered);
+  return (
+    <div
+      data-about-2
+      data-panel
+      data-lenis-prevent
+      aria-labelledby="recognition-h"
+      className={`${panel} ${sheet} pointer-events-none max-w-[560px] opacity-0 [grid-area:1/1] side:max-w-[440px]`}
+    >
+      <Eyebrow>The recognition wall</Eyebrow>
+      <h3 id="recognition-h" className="font-serif text-[clamp(1.5rem,2.6vw,2rem)] font-[450] leading-tight text-ink">
+        Recognition &amp; leadership
+      </h3>
+      <ul className="mt-4 space-y-2">
+        {achievements.map((a) => (
+          <li
+            key={a.id}
+            onMouseEnter={() => setUI({ hovered: a.id === 'gold-medals' ? 'medals' : a.id })}
+            onMouseLeave={() => setUI({ hovered: null })}
+            className={`flex items-start gap-3 rounded-2xl p-3 transition ${
+              hovered === a.id || (a.id === 'gold-medals' && hovered === 'medals') ? 'bg-honey/15' : 'bg-white/40'
+            }`}
+          >
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-honey/30 text-lg" aria-hidden>
+              {a.id === 'gold-medals' ? '🥇' : '🏆'}
+            </span>
+            <span>
+              <span className="block font-serif text-[16.5px] leading-snug text-ink">{a.title}</span>
+              <span className="mt-0.5 block text-[12.5px] text-ink/60">{a.detail}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-5 text-[11px] font-semibold uppercase tracking-[0.18em] text-ink/45">Leadership &amp; activities</p>
+      <ul className="mt-2 space-y-1">
+        {leadership.map((r) => (
+          <li
+            key={r.id}
+            onMouseEnter={() => setUI({ hovered: `role:${r.id}` })}
+            onMouseLeave={() => setUI({ hovered: null })}
+            className={`flex gap-3 rounded-2xl p-3 transition ${hovered === `role:${r.id}` ? 'bg-ink/[0.06]' : 'hover:bg-ink/[0.04]'}`}
+          >
+            <span className="mt-1 w-1.5 shrink-0 self-stretch rounded-full" style={{ background: r.color }} />
+            <span className="min-w-0">
+              <span className="block font-serif text-[16px] leading-snug text-ink">{r.title}</span>
+              <span className="block text-[12px] font-medium text-ink/55">
+                {r.org} · {r.dates}
+              </span>
+              <span className="mt-1 block text-[13px] leading-relaxed text-ink/70">{r.detail}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-4 hidden text-xs italic text-ink/50 [@media(hover:hover)]:block">Hover the trophy and plaques on the shelf.</p>
+    </div>
   );
 }
 

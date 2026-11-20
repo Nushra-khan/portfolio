@@ -28,7 +28,10 @@ const keys: Key[] = [
   // About — the study
   { g: 0.925, pos: [0.9, Y + 1.8, 6.2], look: [-0.4, Y + 1.15, -2], cut: true },
   { g: 1.1, pos: [1.0, Y + 1.72, 4.0], look: [-0.35, Y + 1.08, -2] },
-  { g: 1.68, pos: [0.25, Y + 1.66, 3.7], look: [-0.8, Y + 1.05, -2] },
+  { g: 1.3, pos: [0.7, Y + 1.72, 3.85], look: [-0.6, Y + 1.1, -2] },
+  // turn to the recognition wall: calligraphy, gold medals, trophy & role plaques
+  { g: 1.5, pos: [-1.35, Y + 1.85, 0.9], look: [-3.0, Y + 2.05, -4.8] },
+  { g: 1.68, pos: [-1.55, Y + 1.82, 0.75], look: [-3.1, Y + 2.0, -4.8] },
   { g: 1.86, pos: [6.6, Y + 1.7, 3.2], look: [10.5, Y + 1.5, 2.6] },
   { g: 1.96, pos: [9.6, Y + 1.75, 3.3], look: [14.5, Y + 1.35, 0] },
   // Projects — the workshop

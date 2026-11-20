@@ -33,6 +33,57 @@ export const about = {
   ],
 };
 
+/** Shown on the study's recognition wall and in the About section. */
+export const achievements = [
+  {
+    id: 'gold-medals',
+    title: 'Two gold medals',
+    detail: 'Framed on the study wall',
+  },
+  {
+    id: 'best-website',
+    title: 'Workshop Winner — Best Website',
+    detail: 'No-Code Web Development Workshop, organised by OWASP Sharda',
+  },
+];
+
+export type Role = {
+  id: 'google' | 'owasp' | 'environment';
+  title: string;
+  org: string;
+  dates: string;
+  detail: string;
+  color: string;
+};
+
+/** Each role is a small plaque on the study shelf. */
+export const leadership: Role[] = [
+  {
+    id: 'owasp',
+    title: 'Designer Team Lead',
+    org: 'OWASP Sharda University',
+    dates: 'Nov 2024 – Present',
+    detail: 'Leading the design team: UI/UX, visual assets and consistent branding across technical events and initiatives.',
+    color: '#2F4F7A',
+  },
+  {
+    id: 'google',
+    title: 'Google Student Campus Ambassador',
+    org: 'Sharda University',
+    dates: 'Aug 2025 – Jan 2026',
+    detail: 'Led campus workshops on Google tools and learning resources.',
+    color: '#C2683F',
+  },
+  {
+    id: 'environment',
+    title: 'Member, Environment Club',
+    org: 'Sharda University',
+    dates: 'Sep 2023 – Present',
+    detail: 'Supporting campus initiatives on environmental awareness and sustainability.',
+    color: '#4F6B3A',
+  },
+];
+
 export type Project = {
   id: string;
   title: string;

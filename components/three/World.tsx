@@ -144,16 +144,20 @@ export function World({ tier }: { tier: 'high' | 'low' }) {
         tmp.look.y -= 1.6 * w;
         tmp.pos.z += 3 * w;
       } else if (g > 0.93 && g < 4.88) {
-        const f = THREE.MathUtils.clamp(g - 1, 0, 3);
-        const i = Math.round(f);
+        const f = THREE.MathUtils.clamp(g - 1, 0, 3.99);
+        const i = Math.floor(f);
+        const local = f - i;
         // weight is 1 while holding in a room, 0 while walking through a doorway
-        const hold = 1 - THREE.MathUtils.smoothstep(Math.abs(f - i), 0.3, 0.5);
-        const fx = ROOM_X[i] + PORTRAIT_FOCUS[i];
+        const hold = THREE.MathUtils.smoothstep(local, 0.0, 0.12) * (1 - THREE.MathUtils.smoothstep(local, 0.72, 0.86));
+        // in the study, follow the turn towards the recognition wall
+        const wall = i === 0 ? THREE.MathUtils.smoothstep(local, 0.3, 0.5) : 0;
+        const fx = THREE.MathUtils.lerp(ROOM_X[i] + PORTRAIT_FOCUS[i], -3.5, wall);
         tmp.look.x += (fx - tmp.look.x) * hold;
         tmp.pos.x += (fx - tmp.pos.x) * 0.85 * hold;
         tmp.pos.z += 1.6 * hold;
         tmp.pos.y += 0.35 * hold;
-        tmp.look.y -= 0.9 * hold;
+        tmp.look.y -= (0.9 + [0, 0, 0.75, 0][i] + 0.75 * wall) * hold;
+        tmp.pos.z += 0.5 * wall * hold;
       } else if (g >= 4.88) {
         tmp.look.x += (MAILBOX[0] - 0.4 - tmp.look.x) * 0.8;
         tmp.look.y -= 1.0;

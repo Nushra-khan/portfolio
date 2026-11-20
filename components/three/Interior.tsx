@@ -11,6 +11,7 @@ import { INTERIOR_Y, ROOM_X } from '@/lib/journey';
 import { setUI, nav, useUI } from '@/lib/store';
 import { research, recipes } from '@/content/site';
 import { Calligraphy, PrayerMat, QuranStand, zelligeTexture } from './Heritage';
+import { RecognitionShelf } from './Recognition';
 
 const H = 4.4; // ceiling
 const D = 5; // half depth
@@ -344,7 +345,7 @@ function HangingBulb({ position, len = 1 }: { position: [number, number, number]
 
 function BismillahPanel() {
   const { bind } = useHoverable('bismillah');
-  return <Calligraphy position={[-3.6, 3.12, -4.84]} width={1.22} bind={bind} />;
+  return <Calligraphy position={[-3.65, 3.17, -4.84]} width={1.22} bind={bind} />;
 }
 
 /** Shadow-box frame holding two gold medals. */
@@ -518,13 +519,14 @@ function Study() {
           </mesh>
         ))}
       </group>
-      <MedalFrame position={[-3.6, 2.0, -4.82]} />
+      <MedalFrame position={[-3.65, 2.3, -4.82]} />
+      <RecognitionShelf position={[-3.65, 1.3, -4.66]} />
       <Bookshelf position={[-5.6, 0, -4.6]} w={2.2} h={3.2} rows={5} seed={3} />
       <Bookshelf position={[3.6, 0, -4.6]} w={1.6} h={2.4} rows={4} seed={8} />
       <Chair position={[2.6, 0, -1.4]} rot={-0.6} />
       <Lamp position={[3.6, 0, -2.4]} />
       <Rug position={[0.2, 0.01, -1.2]} w={4} d={2.8} />
-      <Plant position={[-3.6, 0, -4.3]} s={1.6} />
+      <Plant position={[1.75, 0, -4.3]} s={1.5} />
       <Frame position={[-5.9, 3.55, -4.82]} w={0.6} h={0.45} color="#a9bf8e" />
       <Frame position={[3.6, 3.0, -4.82]} w={0.5} h={0.6} color="#e9c98c" />
       <Frame position={[4.3, 3.3, -4.82]} w={0.4} h={0.4} color="#8ec5e8" />
