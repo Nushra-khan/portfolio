@@ -6,12 +6,13 @@ import { ambience } from '@/lib/ambience';
 import { zoneAt } from '@/lib/journey';
 import { sections, site } from '@/content/site';
 
-/** Nav links: the workshop is split into Skills (jar shelf) and Projects (cards). */
+/** Nav links: the workshop is split into Skills / Projects, the library into Research / Experience. */
 const LINKS = [
   { id: 'about', label: 'About', station: 1 },
   { id: 'skills', label: 'Skills', station: 2 },
   { id: 'projects', label: 'Projects', station: 2 },
   { id: 'research', label: 'Research', station: 3 },
+  { id: 'experience', label: 'Experience', station: 3 },
   { id: 'cooking', label: 'Cooking', station: 4 },
   { id: 'contact', label: 'Contact', station: 5 },
 ];
@@ -29,6 +30,9 @@ export function Nav() {
 
   const sound = useUI((s) => s.sound);
   const workshop = useUI((s) => s.workshop);
+  const library = useUI((s) => s.library);
+  const isOn = (s: { id: string; station: number }) =>
+    active === s.station && (s.station === 2 ? workshop === s.id : s.station === 3 ? library === s.id : true);
   const toggleSound = () => {
     if (sound) {
       ambience.stop();
@@ -70,15 +74,15 @@ export function Nav() {
           </span>
         </button>
 
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-0.5 lg:flex xl:gap-1">
           {LINKS.map((s) => {
-            const isActive = active === s.station && (s.station !== 2 || workshop === s.id);
+            const isActive = isOn(s);
             return (
               <li key={s.id}>
                 <button
                   onClick={() => go(s.id)}
                   aria-current={isActive ? 'true' : undefined}
-                  className={`relative rounded-full px-3.5 py-2 text-sm font-medium transition-colors ${
+                  className={`relative rounded-full px-2.5 py-2 text-sm font-medium transition-colors xl:px-3.5 ${
                     isActive ? (night ? 'bg-white/15' : 'bg-ink/[0.07]') : 'opacity-70 hover:opacity-100'
                   }`}
                 >
@@ -97,7 +101,7 @@ export function Nav() {
             className={`hidden h-9 items-center gap-1.5 rounded-full px-3 text-xs font-medium sm:flex ${night ? 'hover:bg-white/10' : 'hover:bg-ink/5'}`}
           >
             <span className={`h-2 w-2 rounded-full ${tier === 'lite' ? 'bg-honey' : 'bg-moss'}`} />
-            {tier === 'lite' ? 'Simple' : '3D'}
+            <span className="hidden xl:inline">{tier === 'lite' ? 'Simple' : '3D'}</span>
           </button>
           <button
             onClick={toggleSound}
@@ -107,7 +111,7 @@ export function Nav() {
             className={`flex h-9 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium sm:px-3 ${night ? 'hover:bg-white/10' : 'hover:bg-ink/5'} ${sound ? (night ? 'bg-white/15' : 'bg-ink/[0.07]') : ''}`}
           >
             <SoundIcon on={sound} />
-            <span className="hidden lg:inline">{sound ? 'Sound on' : 'Sound'}</span>
+            <span className="hidden xl:inline">{sound ? 'Sound on' : 'Sound'}</span>
           </button>
           <a
             href={site.resumeUrl}
@@ -121,7 +125,7 @@ export function Nav() {
             </svg>
           </a>
           <button
-            className={`grid h-9 w-9 place-items-center rounded-full md:hidden ${night ? 'hover:bg-white/10' : 'hover:bg-ink/5'}`}
+            className={`grid h-9 w-9 place-items-center rounded-full lg:hidden ${night ? 'hover:bg-white/10' : 'hover:bg-ink/5'}`}
             aria-expanded={open}
             aria-label="Menu"
             onClick={() => setOpen((o) => !o)}
@@ -134,13 +138,13 @@ export function Nav() {
       </nav>
 
       {open && (
-        <div className="mx-auto mt-2 max-w-6xl rounded-3xl border border-white/60 bg-cream/95 p-2 text-ink shadow-soft backdrop-blur-xl md:hidden">
+        <div className="mx-auto mt-2 max-w-6xl rounded-3xl border border-white/60 bg-cream/95 p-2 text-ink shadow-soft backdrop-blur-xl lg:hidden">
           {LINKS.map((s) => (
             <button
               key={s.id}
               onClick={() => go(s.id)}
               className={`block w-full rounded-2xl px-4 py-3 text-left font-serif text-lg ${
-                active === s.station && (s.station !== 2 || workshop === s.id) ? 'bg-ink/5' : ''
+                isOn(s) ? 'bg-ink/5' : ''
               }`}
             >
               {s.label}

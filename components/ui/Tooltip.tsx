@@ -18,6 +18,9 @@ function labelFor(id: string | null): string | null {
     }
     return null;
   }
+  if (id === 'phone') return 'FoundrFuse Android app — built from scratch · open on Google Play';
+  if (id === 'exp:foundrfuse') return 'Machine Learning Intern · FoundrFuse';
+  if (id === 'exp:iiitk') return 'Research Intern · MINDS Lab, IIIT Kottayam';
   if (id === 'best-website') return 'Workshop Winner — Best Website';
   if (id.startsWith('role:')) {
     const r = leadership.find((x) => `role:${x.id}` === id);

@@ -13,6 +13,7 @@ import { research, recipes } from '@/content/site';
 import { Calligraphy, PrayerMat, QuranStand, zelligeTexture } from './Heritage';
 import { RecognitionShelf } from './Recognition';
 import { SkillJars } from './SkillJars';
+import { ExperienceNook, AppPhone } from './Career';
 
 const H = 4.4; // ceiling
 const D = 5; // half depth
@@ -595,7 +596,9 @@ function Workshop() {
           </mesh>
           <mesh position={[0, 0.03, 0.35]} geometry={geo.box} scale={[0.6, 0.025, 0.2]} material={paint('#e9e2d6')} />
         </group>
-        <Robot position={[0.5, 0.95, 0.1]} />
+        <Robot position={[0.55, 0.95, 0.1]} />
+        {/* the FoundrFuse app — opens the real Play Store listing */}
+        <AppPhone position={[0.0, 0.95, 0.22]} rotation={-0.1} />
         {/* toolbox */}
         <group position={[1.6, 0.95, 0]}>
           <mesh position={[0, 0.12, 0]} geometry={geo.box} scale={[0.6, 0.24, 0.3]} material={paint('#c2683f', { roughness: 0.5 })} castShadow />
@@ -731,6 +734,8 @@ function Library() {
       </group>
       <Chair position={[-1.4, 0, -1.4]} rot={0.5} color="#8c3b3b" />
       <QuranStand position={[0.35, 0, -2.75]} rotation={0.15} />
+      {/* reading nook: work experience */}
+      <ExperienceNook position={[7.25, 0, -0.9]} />
       <Lamp position={[-2.4, 0, -2.2]} h={1.5} />
       <Rug position={[0.4, 0.01, -1.3]} w={4.6} d={2.6} />
       {/* book piles on the floor */}

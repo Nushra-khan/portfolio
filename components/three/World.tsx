@@ -151,7 +151,8 @@ export function World({ tier }: { tier: 'high' | 'low' }) {
         const hold = THREE.MathUtils.smoothstep(local, 0.0, 0.12) * (1 - THREE.MathUtils.smoothstep(local, 0.72, 0.86));
         // in the study, follow the turn towards the recognition wall
         const wall = i === 0 ? THREE.MathUtils.smoothstep(local, 0.3, 0.5) : 0;
-        const fx = THREE.MathUtils.lerp(ROOM_X[i] + PORTRAIT_FOCUS[i], -3.5, wall);
+        const nook = i === 2 ? THREE.MathUtils.smoothstep(local, 0.3, 0.5) : 0;
+        const fx = THREE.MathUtils.lerp(THREE.MathUtils.lerp(ROOM_X[i] + PORTRAIT_FOCUS[i], -3.5, wall), ROOM_X[2] + 7.0, nook);
         tmp.look.x += (fx - tmp.look.x) * hold;
         tmp.pos.x += (fx - tmp.pos.x) * 0.85 * hold;
         tmp.pos.z += 1.6 * hold;

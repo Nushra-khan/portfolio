@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { about, achievements, contact, leadership, projects, recipes, research, site, skillGroups, skillId } from '@/content/site';
+import { about, achievements, contact, experience, leadership, projects, recipes, research, site, skillGroups, skillId } from '@/content/site';
 import { nav, playBell, setUI, useUI } from '@/lib/store';
 import { BellIcon } from '../Experience';
 
@@ -87,6 +87,16 @@ export function Sections({ hidden = false }: { hidden?: boolean }) {
           { opacity: 1, y: 0, pointerEvents: 'auto', duration: 0.1, ease: 'power1.out', immediateRender: false },
           0.4,
         )
+        .set({}, {}, 1);
+
+      // library: publications first, then the reading nook with work experience
+      gsap
+        .timeline({ scrollTrigger: { trigger: '#research', start: 'top top', end: 'bottom bottom', scrub: 0.8 } })
+        .set({}, {}, 0)
+        .to('[data-research-1]', { opacity: 0, y: -24, duration: 0.08, ease: 'power1.inOut' }, 0.36)
+        .set('[data-research-1]', { pointerEvents: 'none' }, 0.4)
+        .fromTo('[data-research-2]', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.1, ease: 'power1.out', immediateRender: false }, 0.42)
+        .set('[data-research-2]', { pointerEvents: 'auto' }, 0.44)
         .set({}, {}, 1);
 
       // workshop: skill jars first, then the project cards slide along the bench
@@ -355,6 +365,8 @@ function Projects({ trackRef }: { trackRef: React.RefObject<HTMLDivElement | nul
             {projects.map((p, i) => (
               <article
                 key={p.id}
+                onMouseEnter={() => p.id === 'foundrfuse' && setUI({ hovered: 'phone' })}
+                onMouseLeave={() => p.id === 'foundrfuse' && setUI({ hovered: null })}
                 className={`${panel} flex w-[min(82vw,380px)] shrink-0 flex-col p-5 sm:p-6 short:p-4`}
                 style={{ borderTop: `4px solid ${p.accent}` }}
               >
@@ -387,7 +399,7 @@ function Projects({ trackRef }: { trackRef: React.RefObject<HTMLDivElement | nul
                   )}
                   {p.demo && (
                     <a href={p.demo} target="_blank" rel="noopener" className="flex items-center gap-1.5 rounded-full bg-ink px-3.5 py-2 text-[13px] font-semibold text-cream hover:bg-moss">
-                      Live demo <ArrowIcon />
+                      {p.demoLabel ?? 'Live demo'} <ArrowIcon />
                     </a>
                   )}
                 </div>
@@ -413,10 +425,10 @@ function Projects({ trackRef }: { trackRef: React.RefObject<HTMLDivElement | nul
 function Research() {
   const hovered = useUI((s) => s.hovered);
   return (
-    <section id="research" className="relative h-[230vh]" aria-labelledby="research-h">
+    <section id="research" className="relative h-[340vh]" aria-labelledby="research-h">
       <div className="pointer-events-none sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
-        <div className="mx-auto flex w-full max-w-6xl justify-center side:justify-start">
-          <div data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] side:max-w-[460px]`}>
+        <div className="mx-auto grid w-full max-w-6xl justify-items-center side:justify-items-start">
+          <div data-research-1 data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] [grid-area:1/1] side:max-w-[460px]`}>
             <div data-reveal>
               <Eyebrow>The library</Eyebrow>
             </div>
@@ -483,9 +495,71 @@ function Research() {
               Each book on the table is one of these — hover a title to lift it.
             </p>
           </div>
+          <ExperiencePanel />
         </div>
       </div>
     </section>
+  );
+}
+
+/** Second library panel — appears as the camera turns to the reading nook. */
+function ExperiencePanel() {
+  const hovered = useUI((s) => s.hovered);
+  return (
+    <div
+      data-research-2
+      data-panel
+      data-lenis-prevent
+      aria-labelledby="experience-h"
+      className={`${panel} ${sheet} max-w-[560px] opacity-0 [grid-area:1/1] side:max-w-[460px]`}
+      style={{ pointerEvents: 'none' }}
+    >
+      <Eyebrow>The reading nook</Eyebrow>
+      <h2 id="experience-h" className="font-serif text-[clamp(1.6rem,3vw,2.3rem)] font-[450] leading-tight text-ink">
+        Experience
+      </h2>
+      <ul className="mt-4 space-y-2">
+        {experience.map((e) => {
+          const on = hovered === `exp:${e.id}` || (e.id === 'foundrfuse' && hovered === 'phone');
+          return (
+            <li
+              key={e.id}
+              onMouseEnter={() => setUI({ hovered: `exp:${e.id}` })}
+              onMouseLeave={() => setUI({ hovered: null })}
+              className={`flex gap-3 rounded-2xl p-3 transition ${on ? 'bg-ink/[0.06]' : 'hover:bg-ink/[0.04]'}`}
+            >
+              <span className="mt-1 w-1.5 shrink-0 self-stretch rounded-full" style={{ background: e.color }} />
+              <span className="min-w-0">
+                <span className="block font-serif text-[17px] leading-snug text-ink">{e.role}</span>
+                <span className="mt-0.5 block text-[12.5px] font-medium text-ink/55">
+                  {e.org} · {e.dates}
+                  {e.location ? ` · ${e.location}` : ''}
+                </span>
+                <ul className="mt-2 space-y-1">
+                  {e.points.map((pt) => (
+                    <li key={pt} className="flex gap-2 text-[13px] leading-relaxed text-ink/75">
+                      <span className="mt-[8px] h-1 w-1 shrink-0 rounded-full bg-ink/40" />
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+                {e.link && (
+                  <a
+                    href={e.link.href}
+                    target="_blank"
+                    rel="noopener"
+                    className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[12.5px] font-semibold text-cream hover:bg-moss"
+                  >
+                    {e.link.label} <ArrowIcon />
+                  </a>
+                )}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+      <p className="mt-4 hidden text-xs italic text-ink/50 [@media(hover:hover)]:block">Hover the ID badge and logbook on the desk.</p>
+    </div>
   );
 }
 

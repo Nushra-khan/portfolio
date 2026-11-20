@@ -36,8 +36,8 @@ const keys: Key[] = [
   { g: 1.96, pos: [9.6, Y + 1.75, 3.3], look: [14.5, Y + 1.35, 0] },
   // Projects — the workshop
   // sweep along the apothecary shelf of skill jars…
-  { g: 2.06, pos: [12.2, Y + 2.85, 0.7], look: [12.4, Y + 2.95, -4.8] },
-  { g: 2.25, pos: [16.6, Y + 2.85, 0.7], look: [16.9, Y + 2.95, -4.8] },
+  { g: 2.06, pos: [11.8, Y + 2.85, 0.7], look: [12.0, Y + 2.95, -4.8] },
+  { g: 2.25, pos: [17.1, Y + 2.85, 0.7], look: [17.4, Y + 2.95, -4.8] },
   // …then step back to the workbench for the project cards
   { g: 2.36, pos: [15.6, Y + 2.15, 5.0], look: [16.0, Y + 0.95, -2] },
   { g: 2.7, pos: [16.6, Y + 2.05, 4.7], look: [16.4, Y + 0.95, -2] },
@@ -45,7 +45,10 @@ const keys: Key[] = [
   { g: 2.96, pos: [25.6, Y + 1.75, 3.3], look: [30.5, Y + 1.35, 0] },
   // Research — the library
   { g: 3.1, pos: [30.9, Y + 1.75, 4.1], look: [32.0, Y + 1.25, -2] },
-  { g: 3.68, pos: [31.6, Y + 1.7, 3.8], look: [32.5, Y + 1.25, -2] },
+  { g: 3.3, pos: [31.4, Y + 1.73, 3.95], look: [32.3, Y + 1.25, -2] },
+  // …then turn towards the reading nook: work experience
+  { g: 3.5, pos: [36.2, Y + 1.62, 1.75], look: [38.35, Y + 0.95, -1.0] },
+  { g: 3.68, pos: [36.45, Y + 1.58, 1.6], look: [38.56, Y + 0.95, -1.2] },
   { g: 3.86, pos: [38.6, Y + 1.7, 3.2], look: [42.5, Y + 1.5, 2.6] },
   { g: 3.96, pos: [41.6, Y + 1.75, 3.3], look: [46.5, Y + 1.3, 0] },
   // Cooking — the kitchen

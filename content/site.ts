@@ -98,6 +98,12 @@ export const skillGroups: SkillGroup[] = [
   { id: 'design', title: 'Design', color: '#E58FB0', skills: ['Figma', 'Framer', 'Canva'] },
   { id: 'frontend', title: 'Frontend & Mobile', color: '#7BA7D9', skills: ['Next.js', 'React Native', 'Flutter', 'Expo', 'Android Studio', 'APK / AAB', 'Play Store Deploy'] },
   { id: 'backend', title: 'Backend & APIs', color: '#C2683F', skills: ['Node.js', 'Express.js', 'Django', 'FastAPI', 'REST APIs', 'Server Management'] },
+  {
+    id: 'payments',
+    title: 'Payments & Integrations',
+    color: '#9E4A6B',
+    skills: ['Razorpay', 'Google Pay (UPI)', 'BillDesk', 'Payment Gateways', 'Payment APIs & Webhooks', 'Transaction Verification'],
+  },
   { id: 'data', title: 'Databases', color: '#4F8A8B', skills: ['PostgreSQL', 'MongoDB', 'Supabase', 'Firebase', 'Vector DBs'] },
   { id: 'cloud', title: 'Cloud & Deploy', color: '#9C8AD8', skills: ['Google Cloud', 'Google Auth', 'Vercel', 'Railway'] },
   { id: 'tools', title: 'Dev & AI Tools', color: '#8A9A5B', skills: ['Git', 'GitHub', 'VS Code', 'Cursor', 'Claude', 'Codex', 'Antigravity'] },
@@ -113,7 +119,47 @@ export const skillGroups: SkillGroup[] = [
 export const skillId = (name: string) => 'skill:' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
 /** Which groups sit on which shelf, top to bottom. */
-export const skillShelves: string[][] = [['languages', 'design'], ['frontend', 'backend'], ['data', 'cloud', 'tools'], ['ai']];
+export const skillShelves: string[][] = [['languages', 'design'], ['frontend', 'backend', 'payments'], ['data', 'cloud', 'tools'], ['ai']];
+
+export type Experience = {
+  id: 'foundrfuse' | 'iiitk';
+  role: string;
+  org: string;
+  dates: string;
+  location?: string;
+  points: string[];
+  link?: { label: string; href: string };
+  color: string;
+};
+
+/** Shown in the library's reading nook (ID badge + research logbook). */
+export const experience: Experience[] = [
+  {
+    id: 'foundrfuse',
+    role: 'Machine Learning Intern',
+    org: 'FoundrFuse Pvt. Ltd.',
+    dates: 'Apr 2026 – Present',
+    points: [
+      'Built the FoundrFuse Android app from scratch and shipped it to Google Play (Kotlin, Jetpack Compose, FCM)',
+      'AI investor–startup matching and pitch-deck analysis with Python and Django (semantic similarity)',
+      'REST APIs, data-validation workflows, testing and release management',
+    ],
+    link: { label: 'View on Google Play', href: 'https://play.google.com/store/apps/details?id=com.foundrfuse.mobile&hl=en_IN' },
+    color: '#2F4F7A',
+  },
+  {
+    id: 'iiitk',
+    role: 'Research Intern — MINDS Research Lab',
+    org: 'IIIT Kottayam',
+    dates: 'May – Jul 2026',
+    location: 'Remote',
+    points: [
+      'Turned patient-monitoring and caregiver needs into mobile app requirements',
+      'Designed the architecture and database for medication schedules, location monitoring and emergency alerts',
+    ],
+    color: '#7A4A2A',
+  },
+];
 
 export type Project = {
   id: string;
@@ -124,10 +170,23 @@ export type Project = {
   details: string[];
   github?: string;
   demo?: string;
+  /** Text for the demo button (defaults to "Live demo"). */
+  demoLabel?: string;
   accent: string;
 };
 
 export const projects: Project[] = [
+  {
+    id: 'foundrfuse',
+    title: 'FoundrFuse — Android app',
+    year: '2026',
+    summary: 'Investor–startup matching app, built from scratch and live on Google Play.',
+    stack: ['Kotlin', 'Jetpack Compose', 'FCM', 'Django', 'REST APIs'],
+    details: ['AI matching & pitch-deck analysis', 'End-to-end Play Store release'],
+    demo: 'https://play.google.com/store/apps/details?id=com.foundrfuse.mobile&hl=en_IN',
+    demoLabel: 'Google Play',
+    accent: '#2F4F7A',
+  },
   {
     id: 'lantern',
     title: 'Lantern',
