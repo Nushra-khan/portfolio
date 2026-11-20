@@ -6,6 +6,16 @@ import { ambience } from '@/lib/ambience';
 import { zoneAt } from '@/lib/journey';
 import { sections, site } from '@/content/site';
 
+/** Nav links: the workshop is split into Skills (jar shelf) and Projects (cards). */
+const LINKS = [
+  { id: 'about', label: 'About', station: 1 },
+  { id: 'skills', label: 'Skills', station: 2 },
+  { id: 'projects', label: 'Projects', station: 2 },
+  { id: 'research', label: 'Research', station: 3 },
+  { id: 'cooking', label: 'Cooking', station: 4 },
+  { id: 'contact', label: 'Contact', station: 5 },
+];
+
 export function Nav() {
   const active = useUI((s) => s.active);
   const tier = useUI((s) => s.tier);
@@ -18,6 +28,7 @@ export function Nav() {
   };
 
   const sound = useUI((s) => s.sound);
+  const workshop = useUI((s) => s.workshop);
   const toggleSound = () => {
     if (sound) {
       ambience.stop();
@@ -60,8 +71,8 @@ export function Nav() {
         </button>
 
         <ul className="hidden items-center gap-1 md:flex">
-          {sections.slice(1).map((s, i) => {
-            const isActive = active === i + 1;
+          {LINKS.map((s) => {
+            const isActive = active === s.station && (s.station !== 2 || workshop === s.id);
             return (
               <li key={s.id}>
                 <button
@@ -124,11 +135,13 @@ export function Nav() {
 
       {open && (
         <div className="mx-auto mt-2 max-w-6xl rounded-3xl border border-white/60 bg-cream/95 p-2 text-ink shadow-soft backdrop-blur-xl md:hidden">
-          {sections.slice(1).map((s, i) => (
+          {LINKS.map((s) => (
             <button
               key={s.id}
               onClick={() => go(s.id)}
-              className={`block w-full rounded-2xl px-4 py-3 text-left font-serif text-lg ${active === i + 1 ? 'bg-ink/5' : ''}`}
+              className={`block w-full rounded-2xl px-4 py-3 text-left font-serif text-lg ${
+                active === s.station && (s.station !== 2 || workshop === s.id) ? 'bg-ink/5' : ''
+              }`}
             >
               {s.label}
             </button>

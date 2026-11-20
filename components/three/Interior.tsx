@@ -12,6 +12,7 @@ import { setUI, nav, useUI } from '@/lib/store';
 import { research, recipes } from '@/content/site';
 import { Calligraphy, PrayerMat, QuranStand, zelligeTexture } from './Heritage';
 import { RecognitionShelf } from './Recognition';
+import { SkillJars } from './SkillJars';
 
 const H = 4.4; // ceiling
 const D = 5; // half depth
@@ -619,42 +620,8 @@ function Workshop() {
           <planeGeometry args={[0.5, 0.36]} />
         </mesh>
       </group>
-      {/* pegboard with tools */}
-      <group position={[0.4, 2.3, -4.82]}>
-        <mesh geometry={geo.box} scale={[3.0, 1.3, 0.04]} material={paint('#d9b98c')} />
-        {[
-          [-1.2, 0.2, 0.06, 0.6, '#c2683f'],
-          [-0.9, 0.1, 0.05, 0.75, '#3b5b8c'],
-          [-0.6, 0.25, 0.07, 0.45, '#b9b2a5'],
-          [-0.3, 0.15, 0.05, 0.6, '#e7b45a'],
-          [0.0, 0.2, 0.09, 0.5, '#4f6b3a'],
-        ].map(([x, y, w, h, c], i) => (
-          <mesh key={i} position={[x as number, y as number, 0.05]} geometry={geo.box} scale={[w as number, h as number, 0.04]} material={paint(c as string, { metalness: 0.3 })} />
-        ))}
-        {[0.5, 0.8, 1.1].map((x, i) => (
-          <mesh key={x} position={[x, 0.1 - i * 0.05, 0.06]} rotation={[0, 0, Math.PI / 2]} material={paint('#b9b2a5', { metalness: 0.7, roughness: 0.3 })}>
-            <torusGeometry args={[0.12 + i * 0.03, 0.015, 6, 20]} />
-          </mesh>
-        ))}
-      </group>
-      {/* shelves with crates */}
-      {[-5.2, 4.8].map((x, k) => (
-        <group key={x} position={[x, 0, -4.4]}>
-          {[0.6, 1.4, 2.2].map((y) => (
-            <mesh key={y} position={[0, y, 0]} geometry={geo.box} scale={[2.0, 0.06, 0.6]} material={paint('#7a4f2e')} castShadow receiveShadow />
-          ))}
-          {[
-            [-0.55, 0.78, '#c49a6c'],
-            [0.2, 0.75, '#a9bf8e'],
-            [0.6, 1.57, '#8ec5e8'],
-            [-0.4, 1.6, '#e9c98c'],
-            [0.3, 2.38, '#c2683f'],
-          ].map(([xx, yy, c], i) => (
-            <mesh key={i} position={[(xx as number) * (k ? -1 : 1), yy as number, 0]} geometry={geo.box} scale={[0.5, 0.3 + (i % 2) * 0.06, 0.45]} material={paint(c as string)} castShadow />
-          ))}
-          <Plant position={[0.75 * (k ? 1 : -1), 2.23, 0]} s={0.6} />
-        </group>
-      ))}
+      {/* apothecary shelf: one labelled jar per skill */}
+      <SkillJars position={[0, 0, -4.62]} />
       {/* drafting easel */}
       <group position={[-3.4, 0, -2.4]} rotation={[0, 0.5, 0]}>
         {[-0.4, 0.4].map((x) => (
@@ -667,8 +634,8 @@ function Workshop() {
           </mesh>
         ))}
       </group>
-      {[-2.5, 0, 2.5].map((x, i) => (
-        <HangingBulb key={x} position={[x, H, -2.8 + i * 0.3]} len={1.0 + (i % 2) * 0.3} />
+      {[-6.4, 6.4].map((x, i) => (
+        <HangingBulb key={x} position={[x, H, -2.2 + i * 0.4]} len={1.0} />
       ))}
       <Rug position={[0, 0.01, -1.4]} w={3.6} d={2.2} />
       <Plant position={[3.4, 0, -3.2]} s={1.4} />
@@ -955,7 +922,7 @@ export function Interior() {
           sky={skies[i]}
           leftDoor={i > 0}
           rightWall={i === ROOM_X.length - 1}
-          windowX={i === 0 ? [-1.6] : i === 1 ? [-2.6, 3.0] : i === 2 ? [0] : [-3.5]}
+          windowX={i === 0 ? [-1.6] : i === 1 ? [-6.0] : i === 2 ? [0] : [-3.5]}
           windowSize={i === 2 ? [1.2, 1.4] : [1.8, 1.5]}
           backDoorX={i === 3 ? 3.6 : undefined}
         />

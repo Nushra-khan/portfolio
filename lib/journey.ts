@@ -35,7 +35,11 @@ const keys: Key[] = [
   { g: 1.86, pos: [6.6, Y + 1.7, 3.2], look: [10.5, Y + 1.5, 2.6] },
   { g: 1.96, pos: [9.6, Y + 1.75, 3.3], look: [14.5, Y + 1.35, 0] },
   // Projects — the workshop
-  { g: 2.1, pos: [15.6, Y + 2.15, 5.0], look: [16.0, Y + 0.95, -2] },
+  // sweep along the apothecary shelf of skill jars…
+  { g: 2.06, pos: [12.2, Y + 2.85, 0.7], look: [12.4, Y + 2.95, -4.8] },
+  { g: 2.25, pos: [16.6, Y + 2.85, 0.7], look: [16.9, Y + 2.95, -4.8] },
+  // …then step back to the workbench for the project cards
+  { g: 2.36, pos: [15.6, Y + 2.15, 5.0], look: [16.0, Y + 0.95, -2] },
   { g: 2.7, pos: [16.6, Y + 2.05, 4.7], look: [16.4, Y + 0.95, -2] },
   { g: 2.86, pos: [22.6, Y + 1.7, 3.2], look: [26.5, Y + 1.5, 2.6] },
   { g: 2.96, pos: [25.6, Y + 1.75, 3.3], look: [30.5, Y + 1.35, 0] },
@@ -119,4 +123,4 @@ export function stationOf(g: number) {
 }
 
 /** Reduced-motion camera: hold still at each station rather than flying. */
-export const STATION_G = [0.0, 1.1, 2.1, 3.1, 4.1, 5.12];
+export const STATION_G = [0.0, 1.1, 2.15, 3.1, 4.1, 5.12];

@@ -3,11 +3,11 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { about, achievements, contact, leadership, projects, recipes, research, site } from '@/content/site';
+import { about, achievements, contact, leadership, projects, recipes, research, site, skillGroups, skillId } from '@/content/site';
 import { nav, playBell, setUI, useUI } from '@/lib/store';
 import { BellIcon } from '../Experience';
 
-const panel = 'rounded-[28px] border border-white/70 bg-cream/[0.86] shadow-soft backdrop-blur-xl';
+const panel = 'pointer-events-auto rounded-[28px] border border-white/70 bg-cream/[0.86] shadow-soft backdrop-blur-xl';
 /** Bottom sheet on phones & portrait tablets, side card on landscape screens. */
 const sheet = 'w-full overflow-y-auto overscroll-contain p-5 sm:p-7 max-h-[56svh] side:max-h-[calc(100svh-8rem)] side:p-8 short:max-h-[calc(100svh-6rem)] short:p-5';
 
@@ -89,27 +89,27 @@ export function Sections({ hidden = false }: { hidden?: boolean }) {
         )
         .set({}, {}, 1);
 
-      // projects: scroll moves the cards sideways along the workbench
+      // workshop: skill jars first, then the project cards slide along the bench
       const t = track.current;
       if (t) {
-        gsap.to(t, {
-          x: () => -Math.max(0, t.scrollWidth - t.parentElement!.clientWidth),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '#projects',
-            start: 'top top',
-            end: 'bottom bottom',
-            scrub: 1.2,
-            invalidateOnRefresh: true,
-          },
+        const wt = gsap.timeline({
+          scrollTrigger: { trigger: '#projects', start: 'top top', end: 'bottom bottom', scrub: 1.2, invalidateOnRefresh: true },
         });
+        wt.set({}, {}, 0)
+          .set('[data-cards] [data-pe], [data-cards] article', { pointerEvents: 'none' }, 0)
+          .to('[data-skills]', { opacity: 0, y: -24, duration: 0.06, ease: 'power1.inOut' }, 0.34)
+          .set('[data-skills] [data-panel]', { pointerEvents: 'none' }, 0.36)
+          .fromTo('[data-cards]', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.07, ease: 'power1.out', immediateRender: false }, 0.39)
+          .set('[data-cards] [data-pe], [data-cards] article', { pointerEvents: 'auto' }, 0.4)
+          .to(t, { x: () => -Math.max(0, t.scrollWidth - t.parentElement!.clientWidth), ease: 'none', duration: 0.5 }, 0.48)
+          .set({}, {}, 1);
       }
     }, root);
     return () => ctx.revert();
   }, []);
 
   return (
-    <main ref={root} className={`relative z-10 ${hidden ? 'invisible' : ''}`}>
+    <main ref={root} className={`pointer-events-none relative z-10 ${hidden ? 'invisible' : ''}`}>
       <Welcome />
       <About />
       <Projects trackRef={track} />
@@ -129,7 +129,7 @@ function Welcome() {
   };
   return (
     <section id="welcome" className="relative h-[260vh]" aria-label="Welcome">
-      <div className="sticky top-0 flex h-[100svh] items-end overflow-hidden pb-[8svh] side:items-center side:pb-0">
+      <div className="pointer-events-none sticky top-0 flex h-[100svh] items-end overflow-hidden pb-[8svh] side:items-center side:pb-0">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-y-0 left-0 hidden w-[70%] bg-[radial-gradient(ellipse_at_15%_60%,rgba(251,245,233,0.82),rgba(251,245,233,0.35)_38%,transparent_62%)] side:block"
@@ -143,7 +143,7 @@ function Welcome() {
           <p className="mt-5 max-w-md text-[16px] leading-relaxed text-ink/75 sm:text-[17px] short:mt-3 short:text-[14px]">
             {site.name} — {site.role.toLowerCase()}. {site.tagline}
           </p>
-          <div className="mt-7 flex flex-wrap items-center gap-3 short:mt-4">
+          <div className="pointer-events-auto mt-7 flex flex-wrap items-center gap-3 short:mt-4">
             <button
               onClick={ring}
               className="group flex h-12 items-center gap-2.5 rounded-full bg-ink pl-4 pr-6 text-[15px] font-semibold text-cream shadow-soft transition hover:bg-moss"
@@ -177,7 +177,7 @@ function Welcome() {
 function About() {
   return (
     <section id="about" className="relative h-[340vh]" aria-labelledby="about-h">
-      <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
+      <div className="pointer-events-none sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
         <div className="mx-auto grid w-full max-w-6xl justify-items-center side:justify-items-end">
           <div data-about-1 data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] [grid-area:1/1] side:max-w-[440px]`}>
             <div data-reveal>
@@ -276,14 +276,69 @@ function Recognition() {
   );
 }
 
+/** First half of the workshop: the skill-jar shelf, mirrored as readable chips. */
+function Toolkit() {
+  const hovered = useUI((s) => s.hovered);
+  return (
+    <div
+      data-skills
+      className="pointer-events-none absolute inset-0 flex items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20"
+    >
+      <div className="mx-auto flex w-full max-w-6xl justify-center side:justify-start">
+        <div data-panel data-lenis-prevent aria-labelledby="skills-h" className={`${panel} ${sheet} max-w-[560px] side:max-w-[400px]`}>
+          <Eyebrow>The workshop</Eyebrow>
+          <h2 id="skills-h" className="font-serif text-[clamp(1.6rem,3vw,2.3rem)] font-[450] leading-tight text-ink">
+            My toolkit
+          </h2>
+          <p className="mt-1 text-[13.5px] leading-relaxed text-ink/60">
+            Every jar on the shelf is something I build with. Hover a skill to find its jar.
+          </p>
+          <div className="mt-4 space-y-3.5">
+            {skillGroups.map((g) => (
+              <div key={g.id}>
+                <p className="mb-1.5 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink/55">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: g.color }} />
+                  {g.title}
+                </p>
+                <ul className="flex flex-wrap gap-1.5">
+                  {g.skills.map((name) => {
+                    const id = skillId(name);
+                    const on = hovered === id;
+                    return (
+                      <li
+                        key={name}
+                        onMouseEnter={() => setUI({ hovered: id })}
+                        onMouseLeave={() => setUI({ hovered: null })}
+                        className="rounded-full border px-2.5 py-1 text-[12.5px] font-medium text-ink/80 transition"
+                        style={{
+                          borderColor: on ? g.color : 'rgba(43,42,38,0.12)',
+                          background: on ? `${g.color}33` : 'rgba(255,255,255,0.45)',
+                        }}
+                      >
+                        {name}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ----------------------------------------------------------- projects -- */
 
 function Projects({ trackRef }: { trackRef: React.RefObject<HTMLDivElement | null> }) {
   return (
-    <section id="projects" className="relative" style={{ height: `${160 + projects.length * 45}vh` }} aria-labelledby="projects-h">
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-end overflow-hidden pb-4 pt-24 sm:pb-8 short:pb-2 short:pt-16">
+    <section id="projects" className="relative" style={{ height: `${300 + projects.length * 45}vh` }} aria-labelledby="projects-h">
+      <div className="pointer-events-none sticky top-0 h-[100svh] overflow-hidden">
+        <Toolkit />
+      <div data-cards className="pointer-events-none absolute inset-0 flex flex-col justify-end pb-4 pt-24 opacity-0 sm:pb-8 short:pb-2 short:pt-16">
         <div className="mx-auto mb-4 w-full max-w-6xl px-4 sm:px-8 short:mb-2">
-          <div className={`${panel} inline-block px-5 py-4 sm:px-6 short:py-2`} data-panel>
+          <div className={`${panel} inline-block px-5 py-4 sm:px-6 short:py-2`} data-panel data-pe>
             <div data-reveal>
               <Eyebrow>The workshop</Eyebrow>
             </div>
@@ -338,7 +393,7 @@ function Projects({ trackRef }: { trackRef: React.RefObject<HTMLDivElement | nul
                 </div>
               </article>
             ))}
-            <div className={`${panel} flex w-[min(70vw,260px)] shrink-0 flex-col justify-center p-6`}>
+            <div data-pe className={`${panel} flex w-[min(70vw,260px)] shrink-0 flex-col justify-center p-6`}>
               <p className="font-serif text-xl text-ink">More on the shelf</p>
               <p className="mt-2 text-sm text-ink/65">Experiments, tools and half-finished ideas live on GitHub.</p>
               <a href={site.socials[0].href} target="_blank" rel="noopener" className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-terracotta">
@@ -347,6 +402,7 @@ function Projects({ trackRef }: { trackRef: React.RefObject<HTMLDivElement | nul
             </div>
           </div>
         </div>
+      </div>
       </div>
     </section>
   );
@@ -358,7 +414,7 @@ function Research() {
   const hovered = useUI((s) => s.hovered);
   return (
     <section id="research" className="relative h-[230vh]" aria-labelledby="research-h">
-      <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
+      <div className="pointer-events-none sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
         <div className="mx-auto flex w-full max-w-6xl justify-center side:justify-start">
           <div data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] side:max-w-[460px]`}>
             <div data-reveal>
@@ -440,7 +496,7 @@ function Cooking() {
   const hovered = useUI((s) => s.hovered);
   return (
     <section id="cooking" className="relative h-[250vh]" aria-labelledby="cooking-h">
-      <div className="sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
+      <div className="pointer-events-none sticky top-0 flex h-[100svh] items-end px-3 pb-3 pt-24 side:items-center side:px-6 side:pb-0 short:pt-20">
         <div className="mx-auto flex w-full max-w-6xl justify-center side:justify-end">
           <div data-panel data-lenis-prevent className={`${panel} ${sheet} max-w-[560px] side:max-w-[460px]`}>
             <div data-reveal>
@@ -505,9 +561,9 @@ function Cooking() {
 function Contact() {
   return (
     <section id="contact" className="relative h-[170vh]" aria-labelledby="contact-h">
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-end px-3 pb-3 pt-24 side:justify-center side:px-6 side:pb-0 short:pt-20">
+      <div className="pointer-events-none sticky top-0 flex h-[100svh] flex-col justify-end px-3 pb-3 pt-24 side:justify-center side:px-6 side:pb-0 short:pt-20">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center side:items-start">
-          <div data-panel data-lenis-prevent className={`${sheet} max-w-[560px] rounded-[28px] border border-white/10 bg-dusk/70 text-cream shadow-soft backdrop-blur-xl side:max-w-[480px]`}>
+          <div data-panel data-lenis-prevent className={`${sheet} pointer-events-auto max-w-[560px] rounded-[28px] border border-white/10 bg-dusk/70 text-cream shadow-soft backdrop-blur-xl side:max-w-[480px]`}>
             <div data-reveal>
               <Eyebrow dark>{contact.eyebrow}</Eyebrow>
             </div>
@@ -543,7 +599,7 @@ function Contact() {
               {site.location} · Or click the glowing mailbox
             </p>
           </div>
-          <footer className="mt-3 flex w-full flex-wrap items-center justify-between gap-2 px-2 text-xs text-cream/60 short:hidden">
+          <footer className="pointer-events-auto mt-3 flex w-full flex-wrap items-center justify-between gap-2 px-2 text-xs text-cream/60 short:hidden">
             <span>
               © {new Date().getFullYear()} {site.name}. Every leaf, loaf and lantern hand-built in code.
             </span>

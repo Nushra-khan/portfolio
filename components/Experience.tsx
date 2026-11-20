@@ -109,10 +109,13 @@ export default function Experience() {
     }
 
     nav.scrollTo = (id, opts) => {
-      const el = document.getElementById(id);
+      // "skills" and "projects" are the two halves of the workshop section
+      const el = document.getElementById(id === 'skills' ? 'projects' : id);
       if (!el) return;
       // land just past the start of a section so the camera has arrived at its room
-      const y = el.offsetTop + (id === 'welcome' ? 0 : innerHeight * 0.25);
+      let y = el.offsetTop + (id === 'welcome' ? 0 : innerHeight * 0.25);
+      if (id === 'skills') y = el.offsetTop + innerHeight * 0.15;
+      if (id === 'projects') y = el.offsetTop + (el.offsetHeight - innerHeight) * 0.52;
       if (lenis) lenis.scrollTo(y, { duration: opts?.duration ?? 2.4, easing: (t) => 1 - Math.pow(1 - t, 3) });
       else window.scrollTo({ top: y, behavior: world.reduced ? 'auto' : 'smooth' });
     };
@@ -129,7 +132,7 @@ export default function Experience() {
     const tick = () => {
       const y = lenis ? lenis.scroll : scrollY;
       if (!world.lock) world.g = scrollToG(y, pts);
-      setUI({ active: stationOf(world.g) });
+      setUI({ active: stationOf(world.g), workshop: world.g >= 2.27 ? 'projects' : 'skills' });
       const s = getUI();
       if (s.sound) ambience.setZone(zoneAt(s.tier === 'lite' ? world.g : world.gSmooth));
     };

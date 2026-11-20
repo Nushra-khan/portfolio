@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useUI } from '@/lib/store';
-import { recipes, research, leadership } from '@/content/site';
+import { recipes, research, leadership, skillGroups, skillId } from '@/content/site';
 
 function labelFor(id: string | null): string | null {
   if (!id) return null;
@@ -11,6 +11,13 @@ function labelFor(id: string | null): string | null {
   if (id === 'robot') return 'Beep boop — that’s Bolt';
   if (id === 'mailbox') return 'Send me a letter';
   if (id === 'bismillah') return 'Bismillah — In the name of God, the Most Gracious, the Most Merciful';
+  if (id.startsWith('skill:')) {
+    for (const g of skillGroups) {
+      const name = g.skills.find((s) => skillId(s) === id);
+      if (name) return `${name} · ${g.title}`;
+    }
+    return null;
+  }
   if (id === 'best-website') return 'Workshop Winner — Best Website';
   if (id.startsWith('role:')) {
     const r = leadership.find((x) => `role:${x.id}` === id);

@@ -84,6 +84,37 @@ export const leadership: Role[] = [
   },
 ];
 
+export type SkillGroup = {
+  id: string;
+  title: string;
+  /** Colour of the jar contents for this group. */
+  color: string;
+  skills: string[];
+};
+
+/** Each skill is a labelled jar on the workshop's apothecary shelf (top shelf first). */
+export const skillGroups: SkillGroup[] = [
+  { id: 'languages', title: 'Languages', color: '#E7B45A', skills: ['Python', 'JavaScript', 'TypeScript', 'Java', 'Kotlin', 'Dart', 'C', 'SQL', 'HTML', 'CSS'] },
+  { id: 'design', title: 'Design', color: '#E58FB0', skills: ['Figma', 'Framer', 'Canva'] },
+  { id: 'frontend', title: 'Frontend & Mobile', color: '#7BA7D9', skills: ['Next.js', 'React Native', 'Flutter', 'Expo', 'Android Studio', 'APK / AAB', 'Play Store Deploy'] },
+  { id: 'backend', title: 'Backend & APIs', color: '#C2683F', skills: ['Node.js', 'Express.js', 'Django', 'FastAPI', 'REST APIs', 'Server Management'] },
+  { id: 'data', title: 'Databases', color: '#4F8A8B', skills: ['PostgreSQL', 'MongoDB', 'Supabase', 'Firebase', 'Vector DBs'] },
+  { id: 'cloud', title: 'Cloud & Deploy', color: '#9C8AD8', skills: ['Google Cloud', 'Google Auth', 'Vercel', 'Railway'] },
+  { id: 'tools', title: 'Dev & AI Tools', color: '#8A9A5B', skills: ['Git', 'GitHub', 'VS Code', 'Cursor', 'Claude', 'Codex', 'Antigravity'] },
+  {
+    id: 'ai',
+    title: 'AI & Machine Learning',
+    color: '#3E8E7E',
+    skills: ['Machine Learning', 'Generative AI', 'Agentic AI', 'LLMs', 'RAG', 'LangChain', 'LangGraph', 'NLP', 'PyTorch', 'Transformers', 'Embeddings', 'Data Analysis'],
+  },
+];
+
+/** Stable id for a skill, shared by the 3D jar and the skill chip. */
+export const skillId = (name: string) => 'skill:' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
+/** Which groups sit on which shelf, top to bottom. */
+export const skillShelves: string[][] = [['languages', 'design'], ['frontend', 'backend'], ['data', 'cloud', 'tools'], ['ai']];
+
 export type Project = {
   id: string;
   title: string;

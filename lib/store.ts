@@ -35,9 +35,11 @@ type UIState = {
   focusedRecipe: string | null;
   notice: string | null;
   sound: boolean;
+  /** In the workshop: looking at the skill jars, or at the project cards. */
+  workshop: 'skills' | 'projects';
 };
 
-let ui: UIState = { active: 0, hovered: null, tier: 'high', entered: false, focusedRecipe: null, notice: null, sound: false };
+let ui: UIState = { active: 0, hovered: null, tier: 'high', entered: false, focusedRecipe: null, notice: null, sound: false, workshop: 'skills' };
 const listeners = new Set<() => void>();
 
 export function setUI(patch: Partial<UIState>) {
